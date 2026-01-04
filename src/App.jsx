@@ -197,7 +197,7 @@ function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['about', 'experience', 'education', 'projects', 'skills'];
+      const sections = ['about', 'experience', 'education', 'projects', 'about-me'];
       const scrollPos = window.scrollY + 200;
 
       for (const id of sections) {
@@ -222,13 +222,13 @@ function App() {
       <aside className="sidebar">
         <div className="logo">Jake Alessi</div>
         <nav className="nav">
-          {['about', 'experience', 'education', 'projects', 'skills'].map((id) => (
+          {['about', 'experience', 'education', 'projects', 'about-me'].map((id) => (
             <div
               key={id}
               className={`nav-link ${activeSection === id ? 'active' : ''}`}
               onClick={() => scrollTo(id)}
             >
-              {id.charAt(0).toUpperCase() + id.slice(1)}
+              {id === 'about-me' ? 'About Me' : id.charAt(0).toUpperCase() + id.slice(1)}
             </div>
           ))}
         </nav>
@@ -249,7 +249,7 @@ function App() {
           </FadeIn>
           <FadeIn delay={0.5}>
             <p className="contact">
-              Stony Brook, NY · (516) 743-0920 · <a href="mailto:jake.alessi@stonybrook.edu">jake.alessi@stonybrook.edu</a>
+              Massapequa, NY · (516) 743-0920 · <a href="mailto:jake.alessi@stonybrook.edu">jake.alessi@stonybrook.edu</a>
             </p>
           </FadeIn>
           <FadeIn delay={0.6}>
@@ -270,11 +270,6 @@ function App() {
                   </a>
                 </ClickSpark>
               </Magnet>
-              <Magnet>
-                <ClickSpark sparkColor="#fafafa">
-                  <a href="#" className="btn btn-primary">Résumé</a>
-                </ClickSpark>
-              </Magnet>
             </div>
           </FadeIn>
         </section>
@@ -288,18 +283,33 @@ function App() {
           <FadeIn delay={0.05}>
             <div className="card">
               <div className="card-header">
-                <div>
-                  <h3 className="card-title">Cybersecurity & IT Intern</h3>
-                  <p className="card-subtitle">Atlantic PC · Great Neck, NY</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ 
+                    padding: '0.5rem', 
+                    border: '1px solid var(--border)', 
+                    borderRadius: '6px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#ffffff',
+                    minWidth: 'fit-content'
+                  }}>
+                    <img src="/atlantic-pc-logo.webp" alt="Atlantic PC" style={{ height: '28px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                  </div>
+                  <div>
+                    <h3 className="card-title">Cybersecurity & IT Intern</h3>
+                    <p className="card-subtitle">Atlantic PC · Great Neck, NY</p>
+                  </div>
                 </div>
                 <span className="card-date">May 2025 – Present</span>
               </div>
               <div className="card-content">
                 <ul>
-                  <li>Develop automation scripts in PowerShell and Bash for system administration</li>
-                  <li>Configure PCs, servers, and network equipment for business clients</li>
-                  <li>Manage cloud infrastructure via Azure and Microsoft 365</li>
-                  <li>Internship extended into fall semester due to strong performance</li>
+                  <li>Develop and implement automation scripts in PowerShell and Bash to streamline system administration tasks, reducing manual configuration time and improving operational efficiency across client environments</li>
+                  <li>Configure and deploy PCs, servers, and network equipment for business clients, ensuring proper setup, security hardening, and network connectivity according to industry best practices</li>
+                  <li>Manage and maintain cloud infrastructure through Azure and Microsoft 365, including user provisioning, security policies, and resource allocation for enterprise clients</li>
+                  <li>Collaborate with senior IT staff to troubleshoot technical issues and implement solutions that meet client business requirements and security standards</li>
+                  <li>Internship extended into fall semester due to strong performance and demonstrated ability to handle complex technical challenges independently</li>
                 </ul>
               </div>
             </div>
@@ -308,17 +318,32 @@ function App() {
           <FadeIn delay={0.1}>
             <div className="card">
               <div className="card-header">
-                <div>
-                  <h3 className="card-title">Consultant</h3>
-                  <p className="card-subtitle">ThermoRoll · Freeport, NY</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ 
+                    padding: '0.5rem', 
+                    border: '1px solid var(--border)', 
+                    borderRadius: '6px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#ffffff',
+                    minWidth: 'fit-content'
+                  }}>
+                    <img src="/thermoroll-logo.png" alt="ThermoRoll" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                  </div>
+                  <div>
+                    <h3 className="card-title">Consultant</h3>
+                    <p className="card-subtitle">ThermoRoll · Freeport, NY</p>
+                  </div>
                 </div>
                 <span className="card-date">Apr 2025 – Present</span>
               </div>
               <div className="card-content">
                 <ul>
-                  <li>Maintain legacy VBA database critical to company operations</li>
-                  <li>Apply bug fixes and optimizations for improved reliability</li>
-                  <li>Advise management on technical improvements and best practices</li>
+                  <li>Maintain and enhance legacy VBA database critical to company operations, ensuring data integrity and system stability while supporting daily business processes</li>
+                  <li>Identify, diagnose, and apply bug fixes and optimizations to improve system reliability, performance, and user experience while maintaining backward compatibility</li>
+                  <li>Analyze system architecture and workflows to recommend technical improvements, modern solutions, and best practices that align with business objectives and future scalability needs</li>
+                  <li>Work closely with management to translate technical requirements into actionable business strategies and provide expert guidance on technology decisions</li>
                 </ul>
               </div>
             </div>
@@ -334,14 +359,28 @@ function App() {
           <FadeIn delay={0.05}>
             <div className="card">
               <div className="card-header">
-                <div>
-                  <h3 className="card-title">Stony Brook University</h3>
-                  <p className="card-subtitle">B.S. Computer Science · B.S. Applied Mathematics</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ 
+                    padding: '0.5rem', 
+                    border: '1px solid var(--border)', 
+                    borderRadius: '6px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#ffffff',
+                    minWidth: 'fit-content'
+                  }}>
+                    <img src="/stony-brook-logo.svg" alt="Stony Brook University" style={{ height: '40px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                  </div>
+                  <div>
+                    <h3 className="card-title">Stony Brook University</h3>
+                    <p className="card-subtitle">B.S. Computer Science · B.S. Applied Mathematics</p>
+                  </div>
                 </div>
                 <span className="card-date">Aug 2023 – May 2027</span>
               </div>
               <div className="card-content">
-                <p style={{ marginBottom: '0.5rem' }}><strong>GPA:</strong> 3.8/4.0</p>
+                <p style={{ marginBottom: '0.5rem' }}><strong>GPA:</strong> 3.7/4.0</p>
                 <p>Data Structures, Algorithms, Systems Fundamentals, Theory of Computation, Linear Algebra, Probability & Statistics, Graph Theory</p>
               </div>
             </div>
@@ -358,22 +397,22 @@ function App() {
             {
               title: 'Stock Arbitrage Bot',
               tech: ['Python', 'Selenium'],
-              desc: 'Automation tool for reverse split arbitrage trades. Achieved 60x ROI ($10 → $600 annually per account).',
+              desc: 'Developed an automation tool to execute trades for reverse split arbitrage opportunities via brokerage web portals. The bot uses Selenium to navigate and interact with trading interfaces, identifying and capitalizing on price discrepancies that occur during reverse stock splits. Implemented robust error handling and logging to ensure reliable execution across multiple accounts. Achieved exceptional returns of approximately $600 per account annually from an initial balance of just $10, representing a 60x return on investment.',
             },
             {
               title: 'Custom Memory Allocator',
               tech: ['C'],
-              desc: 'Dynamic allocation system using segregated free lists. Implemented malloc, free, and realloc with coalescing.',
+              desc: 'Built a dynamic memory allocation system from scratch using segregated free lists and quick lists for efficient memory management. Implemented the core functions malloc, free, and realloc with advanced features including block splitting for optimal space utilization, coalescing of adjacent free blocks to reduce fragmentation, and proper alignment support for different data types. Developed comprehensive testing and measurement tools to analyze fragmentation and utilization metrics, verifying the allocator\'s efficiency and performance characteristics.',
             },
             {
               title: 'Video Playlist App',
               tech: ['React', 'Node.js'],
-              desc: 'Single-page app for building video playlists with full undo/redo support.',
+              desc: 'Created a single-page web application for building and managing video playlists with a focus on user experience and functionality. Users can create multiple playlists, rename them, and reorder tracks with drag-and-drop functionality. The app supports adding, editing, deleting, and duplicating tracks with full undo/redo capabilities implemented using a command pattern. Built with modular React components and lightweight CSS, using Node.js tooling for development and build processes. The application maintains state persistence and provides an intuitive interface for playlist management.',
             },
             {
               title: 'Academic Calendar Scraper',
               tech: ['Python', 'Playwright'],
-              desc: 'Converts university calendars to iCalendar format for Google/Outlook import.',
+              desc: 'Developed a web scraping solution to convert HTML-based university academic calendars into structured, machine-readable formats. Used Playwright with headless Chromium to navigate and extract calendar data from university websites, handling dynamic content and various HTML structures. Implemented Python parsing logic to clean and structure the extracted data into clean JSON format. The system then converts these JSON events into standard iCalendar (.ics) files, making it easy for students to import academic schedules directly into Google Calendar, Outlook, or any calendar application that supports the iCal format.',
             },
           ].map((project, i) => (
             <FadeIn key={project.title} delay={0.05 * (i + 1)}>
@@ -394,21 +433,27 @@ function App() {
           ))}
         </section>
 
-        {/* Skills */}
-        <section id="skills">
+        {/* About Me */}
+        <section id="about-me">
           <FadeIn>
-            <h2 className="section-title">Skills</h2>
+            <h2 className="section-title">About Me</h2>
           </FadeIn>
           
           <FadeIn delay={0.05}>
-            <div className="skills-list">
-              {[
-                'Python', 'JavaScript', 'Java', 'C', 'React', 'Node.js',
-                'Playwright', 'Selenium', 'Git', 'Linux', 'Azure', 
-                'PowerShell', 'Bash', 'pandas', 'NumPy'
-              ].map((skill) => (
-                <span key={skill} className="skill">{skill}</span>
-              ))}
+            <div className="card">
+              <div className="card-content">
+                <p>
+                  When I'm not coding, I enjoy a variety of hobbies that keep me engaged and balanced. 
+                  I'm an avid reader, always exploring new books across different genres. Music is a 
+                  big part of my life—I love discovering new artists and collecting vinyl records, 
+                  building a collection that spans various genres and eras.
+                </p>
+                <p style={{ marginTop: '1rem' }}>
+                  I also enjoy strategic games like chess, which helps sharpen my analytical thinking. 
+                  When it comes to poker, I play both Omaha and Texas Hold'em, enjoying the 
+                  mathematical and psychological aspects of the game.
+                </p>
+              </div>
             </div>
           </FadeIn>
         </section>
