@@ -293,7 +293,7 @@ function App() {
                     background: '#ffffff',
                     minWidth: 'fit-content'
                   }}>
-                    <img src="/atlantic-pc-logo.webp" alt="Atlantic PC" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                    <img src={`${import.meta.env.BASE_URL}atlantic-pc-logo.webp`} alt="Atlantic PC" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
                   </div>
                   <div>
                     <h3 className="card-title">Cybersecurity & IT Intern</h3>
@@ -328,7 +328,7 @@ function App() {
                     background: '#ffffff',
                     minWidth: 'fit-content'
                   }}>
-                    <img src="/thermoroll-logo.png" alt="ThermoRoll" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                    <img src={`${import.meta.env.BASE_URL}thermoroll-logo.png`} alt="ThermoRoll" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
                   </div>
                   <div>
                     <h3 className="card-title">Consultant</h3>
@@ -369,7 +369,7 @@ function App() {
                     background: '#ffffff',
                     minWidth: 'fit-content'
                   }}>
-                    <img src="/stony-brook-logo.svg" alt="Stony Brook University" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                    <img src={`${import.meta.env.BASE_URL}stony-brook-logo.svg`} alt="Stony Brook University" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
                   </div>
                   <div>
                     <h3 className="card-title">Stony Brook University</h3>
