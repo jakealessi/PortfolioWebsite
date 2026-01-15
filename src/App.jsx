@@ -243,7 +243,7 @@ function App() {
           </h1>
           <FadeIn delay={0.4}>
             <p className="tagline">
-                Computer Science & Applied Mathematics Double Major @ SBU interested in automation, exploiting loopholes, and optimizing processes.
+                Computer Science & Applied Mathematics @ SBU interested in automation, exploiting loopholes, and optimizing processes.
             </p>
           </FadeIn>
           <FadeIn delay={0.5}>
@@ -379,14 +379,31 @@ function App() {
                 <span className="card-date">Aug 2023 – May 2027</span>
               </div>
               <div className="card-content">
-                <p style={{ marginBottom: '0.5rem' }}><strong>GPA:</strong> 3.7/4.0</p>
-                <p>
-                  Key coursework in Computer Science and Applied Mathematics &amp; Statistics: Computer Science I &amp; II (CSE 114, 214),
-                  Programming Abstractions (CSE 216), Systems Fundamentals I &amp; II (CSE 220, 320), Theory of Computation (CSE 303),
-                  Analysis of Algorithms (CSE 373), Software Development &amp; Engineering (CSE 316, 416), Data Science &amp; Machine Learning
-                  (CSE 351, 353), Logic (CSE 371), Legal Issues in Computing (CSE 312), Applied Calculus III (AMS 261), Applied Linear Algebra
-                  (AMS 210), Finite Mathematical Structures (AMS 301), Survey of Probability and Statistics (AMS 310), and Data Analysis (AMS 315).
-                </p>
+              <p style={{ marginBottom: '0.5rem' }}><strong>Coursework</strong></p>
+<p>
+  CSE 114: Computer Science I<br />
+  CSE 214: Data Structures<br />
+  CSE 215: Foundations of Computer Science<br />
+  CSE 216: Programming Abstractions<br />
+  CSE 220: Systems Fundamentals I<br />
+  CSE 303: Theory of Computation<br />
+  CSE 316: Software Development<br />
+  CSE 320: Systems Fundamentals II<br />
+  CSE 351: Introduction to Data Science<br />
+  CSE 353: Machine Learning<br />
+  CSE 371: Logic<br />
+  CSE 373: Analysis of Algorithms<br />
+  CSE 416: Software Engineering<br />
+  CSE 312: Legal Issues in Computing<br />
+  AMS 210: Applied Linear Algebra<br />
+  AMS 261: Applied Calculus III<br />
+  AMS 301: Finite Mathematical Structures<br />
+  AMS 310: Survey of Probability and Statistics<br />
+  AMS 315: Data Analysis
+</p>
+<p style={{ marginTop: '0.5rem' }}>
+  Member of the Algorithms and Computational Geometry groups.
+</p>
               </div>
             </div>
           </FadeIn>
