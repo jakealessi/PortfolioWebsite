@@ -243,7 +243,7 @@ function App() {
           </h1>
           <FadeIn delay={0.4}>
             <p className="tagline">
-                Computer Science & Applied Mathematics Double Major @ SBU interested in automation, exploiting loopholes, and optimizing processes.
+                Computer Science & Applied Mathematics @ SBU interested in automation, exploiting loopholes, and optimizing processes.
             </p>
           </FadeIn>
           <FadeIn delay={0.5}>
