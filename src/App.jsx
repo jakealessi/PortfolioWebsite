@@ -243,7 +243,7 @@ function App() {
           </h1>
           <FadeIn delay={0.4}>
             <p className="tagline">
-                Computer Science & Applied Mathematics @ SBU interested in automation, exploiting loopholes, and optimizing processes.
+                Computer Science & Applied Mathematics Double Major @ SBU interested in automation, exploiting loopholes, and optimizing processes.
             </p>
           </FadeIn>
           <FadeIn delay={0.5}>
@@ -293,7 +293,7 @@ function App() {
                     background: '#ffffff',
                     minWidth: 'fit-content'
                   }}>
-                    <img src="/atlantic-pc-logo.webp" alt="Atlantic PC" style={{ height: '28px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                    <img src="/atlantic-pc-logo.webp" alt="Atlantic PC" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
                   </div>
                   <div>
                     <h3 className="card-title">Cybersecurity & IT Intern</h3>
@@ -369,7 +369,7 @@ function App() {
                     background: '#ffffff',
                     minWidth: 'fit-content'
                   }}>
-                    <img src="/stony-brook-logo.svg" alt="Stony Brook University" style={{ height: '40px', width: 'auto', display: 'block', objectFit: 'contain' }} />
+                    <img src="/stony-brook-logo.svg" alt="Stony Brook University" style={{ height: '32px', width: 'auto', display: 'block', objectFit: 'contain' }} />
                   </div>
                   <div>
                     <h3 className="card-title">Stony Brook University</h3>
@@ -380,16 +380,13 @@ function App() {
               </div>
               <div className="card-content">
                 <p style={{ marginBottom: '0.5rem' }}><strong>GPA:</strong> 3.7/4.0</p>
-                <p> Specialization in Artificial Intelligence and Data Science</p>
                 <p>
-CSE 373: Advanced Algorithms
-CSE 320: Systems Fundamentals II
-CSE 316: Software Development
-CSE 312: Legal Issues in Computing (Ethics)
-CSE 214:
-CSE 220: Systems Fundamentals I
-AMS 310: Probability and Statistics
-AMS 301: Finite Mathematical Structures </p>
+                  Key coursework in Computer Science and Applied Mathematics &amp; Statistics: Computer Science I &amp; II (CSE 114, 214),
+                  Programming Abstractions (CSE 216), Systems Fundamentals I &amp; II (CSE 220, 320), Theory of Computation (CSE 303),
+                  Analysis of Algorithms (CSE 373), Software Development &amp; Engineering (CSE 316, 416), Data Science &amp; Machine Learning
+                  (CSE 351, 353), Logic (CSE 371), Legal Issues in Computing (CSE 312), Applied Calculus III (AMS 261), Applied Linear Algebra
+                  (AMS 210), Finite Mathematical Structures (AMS 301), Survey of Probability and Statistics (AMS 310), and Data Analysis (AMS 315).
+                </p>
               </div>
             </div>
           </FadeIn>
