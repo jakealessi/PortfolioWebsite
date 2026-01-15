@@ -243,8 +243,7 @@ function App() {
           </h1>
           <FadeIn delay={0.4}>
             <p className="tagline">
-              Computer Science & Applied Mathematics student building automation tools, 
-              efficient systems, and creative solutions to complex problems.
+                Computer Science & Applied Mathematics Double Major @ SBU interested in automation, exploiting loopholes, and optimizing processes.
             </p>
           </FadeIn>
           <FadeIn delay={0.5}>
@@ -301,7 +300,7 @@ function App() {
                     <p className="card-subtitle">Atlantic PC · Great Neck, NY</p>
                   </div>
                 </div>
-                <span className="card-date">May 2025 – Present</span>
+                <span className="card-date">May 2025 – Dec 2025</span>
               </div>
               <div className="card-content">
                 <ul>
@@ -381,7 +380,16 @@ function App() {
               </div>
               <div className="card-content">
                 <p style={{ marginBottom: '0.5rem' }}><strong>GPA:</strong> 3.7/4.0</p>
-                <p>Data Structures, Algorithms, Systems Fundamentals, Theory of Computation, Linear Algebra, Probability & Statistics, Graph Theory</p>
+                <p> Specialization in Artificial Intelligence and Data Science</p>
+                <p>
+CSE 373: Advanced Algorithms
+CSE 320: Systems Fundamentals II
+CSE 316: Software Development
+CSE 312: Legal Issues in Computing (Ethics)
+CSE 214:
+CSE 220: Systems Fundamentals I
+AMS 310: Probability and Statistics
+AMS 301: Finite Mathematical Structures </p>
               </div>
             </div>
           </FadeIn>
