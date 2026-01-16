@@ -243,7 +243,7 @@ function App() {
           </h1>
           <FadeIn delay={0.4}>
             <p className="tagline">
-                Computer Science & Applied Mathematics @ SBU interested in automation, exploiting loopholes, and optimizing processes.
+                Computer Science & Applied Mathematics Double Major interested in automation, exploiting loopholes, arbitrage, and optimizing processes.
             </p>
           </FadeIn>
           <FadeIn delay={0.5}>
@@ -381,7 +381,7 @@ function App() {
               <div className="card-content">
               <p style={{ marginBottom: '0.5rem' }}><strong>Coursework</strong></p>
 <p>
-  CSE 114: Computer Science I<br />
+  CSE 114: Introduction to Object-Oriented Programming<br />
   CSE 214: Data Structures<br />
   CSE 215: Foundations of Computer Science<br />
   CSE 216: Programming Abstractions<br />
@@ -390,16 +390,16 @@ function App() {
   CSE 316: Software Development<br />
   CSE 320: Systems Fundamentals II<br />
   CSE 351: Introduction to Data Science<br />
-  CSE 353: Machine Learning<br />
   CSE 371: Logic<br />
   CSE 373: Analysis of Algorithms<br />
-  CSE 416: Software Engineering<br />
   CSE 312: Legal Issues in Computing<br />
   AMS 210: Applied Linear Algebra<br />
   AMS 261: Applied Calculus III<br />
   AMS 301: Finite Mathematical Structures<br />
   AMS 310: Survey of Probability and Statistics<br />
   AMS 315: Data Analysis
+
+  via AP Credits: Calculus I and Calculus II
 </p>
 <p style={{ marginTop: '0.5rem' }}>
   Member of the Algorithms and Computational Geometry groups.
@@ -464,17 +464,30 @@ function App() {
           <FadeIn delay={0.05}>
             <div className="card">
               <div className="card-content">
-                <p>
-                  When I'm not coding, I enjoy a variety of hobbies that keep me engaged and balanced. 
-                  I'm an avid reader, always exploring new books across different genres. Music is a 
-                  big part of my life—I love discovering new artists and collecting vinyl records, 
-                  building a collection that spans various genres and eras.
-                </p>
-                <p style={{ marginTop: '1rem' }}>
-                  I also enjoy strategic games like chess, which helps sharpen my analytical thinking. 
-                  When it comes to poker, I play both Omaha and Texas Hold'em, enjoying the 
-                  mathematical and psychological aspects of the game.
-                </p>
+<p>
+  When I’m not coding or working on school projects, I spend my time on a mix of hobbies that help me
+  wind down and stay engaged.
+</p>
+
+<p style={{ marginTop: '1rem' }}>
+  I like to keep up with pop culture by watching movies, listening to music, and reading books.
+  Music is easily my favorite out of the three. I have an ever-expanding vinyl collection and try
+  to listen to at least one new album every week. My current favorite album is <i>Vices</i> by Weiland.
+</p>
+
+<p style={{ marginTop: '1rem' }}>
+  I’m also a very competitive person, so I like to keep myself occupied with different games.
+  I play a lot of strategy games like Scrabble, Risk, chess, and poker, as well as competitive
+  video games like Rocket League and Marvel Rivals. When it comes to sports, I mostly play pickup
+  basketball and soccer.
+</p>
+
+<p style={{ marginTop: '1rem' }}>
+  I also like to hustle on the side whenever I get the chance. One of my favorite ways to do that is
+  reselling. Amazon and other big retailers frequently misprice items that I can scoop up and then resell for a large profit.
+  I remember Doordash had an error where you could essentially get $50 worth of items for free. I was able to place 10+ orders and only had to pay tip.
+  Capitalizing on these glitches is not only fun but also incredibly lucrative!
+</p>
               </div>
             </div>
           </FadeIn>
