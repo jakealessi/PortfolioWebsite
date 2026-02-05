@@ -388,18 +388,21 @@ function App() {
   CSE 220: Systems Fundamentals I<br />
   CSE 303: Theory of Computation<br />
   CSE 316: Software Development<br />
+  CSE 416: Software Engineering<br />
   CSE 320: Systems Fundamentals II<br />
   CSE 351: Introduction to Data Science<br />
+  CSE 353: Machine Learning<br />
   CSE 371: Logic<br />
   CSE 373: Analysis of Algorithms<br />
   CSE 312: Legal Issues in Computing<br />
+  CSE 300: Technical Communications<br />
   AMS 210: Applied Linear Algebra<br />
   AMS 261: Applied Calculus III<br />
   AMS 301: Finite Mathematical Structures<br />
   AMS 310: Survey of Probability and Statistics<br />
-  AMS 315: Data Analysis
+  AMS 315: Data Analysis<br />
 
-  via AP Credits: Calculus I and Calculus II
+  via AP Credits: Calculus I and Calculus II<br />
 </p>
 <strong>3.70/4.0 GPA</strong>
 <p style={{ marginTop: '0.5rem' }}>
