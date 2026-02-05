@@ -401,6 +401,7 @@ function App() {
 
   via AP Credits: Calculus I and Calculus II
 </p>
+<strong>3.70/4.0 GPA</strong>
 <p style={{ marginTop: '0.5rem' }}>
   Member of the Algorithms and Computational Geometry groups.
 </p>
@@ -419,7 +420,7 @@ function App() {
             {
               title: 'Stock Arbitrage Bot',
               tech: ['Python', 'Selenium'],
-              desc: 'Developed an automation tool to execute trades for reverse split arbitrage opportunities via brokerage web portals. The bot uses Selenium to navigate and interact with trading interfaces, identifying and capitalizing on price discrepancies that occur during reverse stock splits. Implemented robust error handling and logging to ensure reliable execution across multiple accounts. Achieved exceptional returns of approximately $600 per account annually from an initial balance of just $10, representing a 60x return on investment.',
+              desc: 'Developed an automation tool to execute trades for reverse split arbitrage opportunities via 10+ brokerage web portals. The bot uses Selenium or existing APIs to navigate and interact with trading interfaces, typically buying stocks that are going through a reverse split. Implemented robust error handling and logging to ensure reliable execution across multiple accounts. Achieved exceptional returns of approximately $600 per account annually from an initial balance of just $10, representing a 60x return on investment.',
             },
             {
               title: 'Custom Memory Allocator',
@@ -427,9 +428,9 @@ function App() {
               desc: 'Built a dynamic memory allocation system from scratch using segregated free lists and quick lists for efficient memory management. Implemented the core functions malloc, free, and realloc with advanced features including block splitting for optimal space utilization, coalescing of adjacent free blocks to reduce fragmentation, and proper alignment support for different data types. Developed comprehensive testing and measurement tools to analyze fragmentation and utilization metrics, verifying the allocator\'s efficiency and performance characteristics.',
             },
             {
-              title: 'Video Playlist App',
-              tech: ['React', 'Node.js'],
-              desc: 'Created a single-page web application for building and managing video playlists with a focus on user experience and functionality. Users can create multiple playlists, rename them, and reorder tracks with drag-and-drop functionality. The app supports adding, editing, deleting, and duplicating tracks with full undo/redo capabilities implemented using a command pattern. Built with modular React components and lightweight CSS, using Node.js tooling for development and build processes. The application maintains state persistence and provides an intuitive interface for playlist management.',
+              title: 'Playlister',
+              tech: ['MongoDB','PostgreSQL', 'Express', 'React', 'Node.js', 'YouTube API'],
+              desc: 'Built a full-stack web application for creating and playing YouTube music video playlists, with a flexible backend supporting both MongoDB and PostgreSQL databases. Implemented user authentication with account creation, login, and profile editing including custom avatar uploads. Registered users can create, edit, copy, and delete playlists while guests can browse and play existing playlists. Features include a searchable songs catalog where users can add songs to the system, playlist discovery with multiple search criteria (playlist name, user, song title, artist, year), and sorting options for both playlists and songs. Integrated the YouTube API for seamless video playback with player controls and repeat functionality. Implemented undo/redo capabilities using a transaction stack during playlist editing. Designed modals for playlist editing, playback, and delete confirmations with foolproof UI that hides unavailable actions from unauthorized users. Conducted extensive API testing through Postman to ensure reliability and proper endpoint behavior.',
             },
             {
               title: 'Academic Calendar Scraper',
