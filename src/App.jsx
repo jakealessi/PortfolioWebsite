@@ -188,12 +188,144 @@ function ClickSpark({ children, sparkColor = '#3b82f6', sparkCount = 6 }) {
   );
 }
 
+// Lightbulb theme toggle
+function LightbulbToggle({ isDark, onToggle }) {
+  const [isPulling, setIsPulling] = useState(false);
+  const [bulbOn, setBulbOn] = useState(!isDark);
+  const bulbRef = useRef(null);
+
+  const handleClick = () => {
+    setIsPulling(true);
+
+    // Switch bulb visuals immediately
+    const turningOn = !bulbOn;
+    setBulbOn(turningOn);
+
+    // Get the bulb's position for the radial reveal
+    const bulbEl = bulbRef.current;
+    const rect = bulbEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    // Calculate radius needed to cover the entire viewport
+    const maxDist = Math.sqrt(
+      Math.max(cx, window.innerWidth - cx) ** 2 +
+      Math.max(cy, window.innerHeight - cy) ** 2
+    );
+
+    // Create overlay with the NEW/target color expanding from the bulb
+    const overlay = document.createElement('div');
+    overlay.className = 'theme-reveal-overlay';
+    overlay.style.setProperty('--reveal-cx', `${cx}px`);
+    overlay.style.setProperty('--reveal-cy', `${cy}px`);
+    overlay.style.setProperty('--reveal-radius', `${maxDist}px`);
+    overlay.style.background = turningOn ? '#fafafa' : '#0a0a0a';
+    document.body.appendChild(overlay);
+
+    // Start expanding circle from bulb
+    requestAnimationFrame(() => {
+      overlay.classList.add('expanding');
+    });
+
+    // Switch actual theme once overlay covers the screen, then remove it
+    setTimeout(() => {
+      onToggle();
+      overlay.remove();
+    }, 300);
+
+    setTimeout(() => {
+      setIsPulling(false);
+    }, 500);
+  };
+
+  const bulbColor = bulbOn ? '#f5b820' : '#d1d5db';
+  const bulbColorLight = bulbOn ? '#fcd34d' : '#e5e7eb';
+  const filamentColor = bulbOn ? '#78350f' : '#374151';
+
+  return (
+    <div className="lightbulb-toggle" onClick={handleClick} title={isDark ? "Turn on the light" : "Turn off the light"}>
+
+      {/* Bulb - SVG for precise shape */}
+      <svg ref={bulbRef} className={`bulb-svg ${bulbOn ? 'on' : ''}`} viewBox="0 0 60 90" width="50" height="75">
+        {/* Glow effect when on */}
+        {bulbOn && (
+          <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+        )}
+        
+        {/* Wire to ceiling */}
+        <line x1="30" y1="0" x2="30" y2="14" stroke="#9ca3af" strokeWidth="2"/>
+        
+        {/* Screw cap - dome/trapezoid shape */}
+        <path 
+          d="M 18 14 
+             Q 18 11, 22 11 
+             L 38 11 
+             Q 42 11, 42 14 
+             L 42 18 
+             Q 42 22, 40 24 
+             L 20 24 
+             Q 18 22, 18 18 
+             Z"
+          fill="#9ca3af"
+        />
+        {/* Cap bottom rim */}
+        <rect x="19" y="24" width="22" height="2" rx="1" fill="#6b7280"/>
+        
+        {/* Glass bulb - classic rounded pear shape, wider neck */}
+        <path 
+          d="M 20 26 
+             C 20 31, 18 36, 14 42 
+             C 9 50, 7 57, 9 64 
+             C 11 72, 18 79, 30 79 
+             C 42 79, 49 72, 51 64 
+             C 53 57, 51 50, 46 42 
+             C 42 36, 40 31, 40 26 
+             Z"
+          fill={bulbColor}
+          filter={bulbOn ? "url(#glow)" : "none"}
+        />
+        
+        {/* Filament wires - two curves meeting at bottom */}
+        <path d="M 26 28 C 25 40, 23 50, 30 63" stroke={filamentColor} strokeWidth="2" strokeLinecap="round" fill="none"/>
+        <path d="M 34 28 C 35 40, 37 50, 30 63" stroke={filamentColor} strokeWidth="2" strokeLinecap="round" fill="none"/>
+      </svg>
+      
+      {/* Ball chain - extra balls hidden above viewport, revealed on pull */}
+      <div className={`ball-chain ${isPulling ? 'pulling' : ''}`}>
+        {[...Array(10)].map((_, i) => (
+          <div key={i} className="chain-ball" />
+        ))}
+        <div className="chain-pull" />
+      </div>
+    </div>
+  );
+}
+
 // ============================================
 // Main App
 // ============================================
 
 function App() {
   const [activeSection, setActiveSection] = useState('about');
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    return saved ? saved === 'dark' : true;
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -219,6 +351,7 @@ function App() {
 
   return (
     <div className="app">
+      <LightbulbToggle isDark={isDark} onToggle={toggleTheme} />
       <aside className="sidebar">
         <div className="logo">Jake Alessi</div>
         <nav className="nav">
