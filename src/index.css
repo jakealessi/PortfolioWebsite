@@ -6,6 +6,28 @@
   --text-secondary: #a1a1a1;
   --text-muted: #666666;
   --accent: #3b82f6;
+  --logo-bg: #ffffff;
+  --nav-hover-bg: rgba(255, 255, 255, 0.03);
+  --nav-active-bg: rgba(255, 255, 255, 0.06);
+  --tech-tag-bg: rgba(255, 255, 255, 0.04);
+  --skill-bg: rgba(255, 255, 255, 0.03);
+  --mobile-nav-bg: rgba(10, 10, 10, 0.95);
+}
+
+[data-theme="light"] {
+  --bg: #fafafa;
+  --bg-elevated: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --text: #0a0a0a;
+  --text-secondary: #525252;
+  --text-muted: #888888;
+  --accent: #2563eb;
+  --logo-bg: #ffffff;
+  --nav-hover-bg: rgba(0, 0, 0, 0.03);
+  --nav-active-bg: rgba(0, 0, 0, 0.06);
+  --tech-tag-bg: rgba(0, 0, 0, 0.04);
+  --skill-bg: rgba(0, 0, 0, 0.03);
+  --mobile-nav-bg: rgba(250, 250, 250, 0.95);
 }
 
 *, *::before, *::after {
@@ -54,7 +76,7 @@ a {
   display: flex;
   flex-direction: column;
   z-index: 100;
-  background: var(--bg);
+  background: transparent;
 }
 
 .logo {
@@ -82,12 +104,12 @@ a {
 
 .nav-link:hover {
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--nav-hover-bg);
 }
 
 .nav-link.active {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--nav-active-bg);
 }
 
 /* Main */
@@ -275,7 +297,7 @@ section:last-of-type {
   font-size: 0.6875rem;
   color: var(--text-muted);
   padding: 0.25rem 0.5rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--tech-tag-bg);
   border-radius: 4px;
 }
 
@@ -290,7 +312,7 @@ section:last-of-type {
   font-size: 0.875rem;
   color: var(--text-secondary);
   padding: 0.5rem 0.875rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--skill-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   transition: border-color 0.15s ease;
@@ -318,7 +340,7 @@ section:last-of-type {
     padding: 0;
     border-right: none;
     border-top: 1px solid var(--border);
-    background: rgba(10, 10, 10, 0.95);
+    background: var(--mobile-nav-bg);
     backdrop-filter: blur(10px);
   }
   
@@ -357,4 +379,108 @@ section:last-of-type {
   }
 }
 
+/* Lightbulb Theme Toggle */
+.lightbulb-toggle {
+  position: fixed;
+  top: 0;
+  right: 50px;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  cursor: pointer;
+  user-select: none;
+}
 
+/* SVG Bulb */
+.bulb-svg {
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.bulb-svg.on {
+  filter: drop-shadow(0 0 8px rgba(245, 184, 32, 0.6));
+}
+
+/* ===== THEME REVEAL ===== */
+.theme-reveal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  pointer-events: none;
+  clip-path: circle(0px at var(--reveal-cx) var(--reveal-cy));
+  transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-reveal-overlay.expanding {
+  clip-path: circle(var(--reveal-radius) at var(--reveal-cx) var(--reveal-cy));
+}
+
+/* ===== BALL CHAIN ===== */
+.ball-chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding-top: 4px;
+  /* Hide 5 extra balls above viewport (5 balls × 5px each = 25px) */
+  transform: translateY(-25px);
+  transition: transform 0.15s ease;
+}
+
+.ball-chain.pulling {
+  animation: pullBallChain 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes pullBallChain {
+  0%   { transform: translateY(-25px); }
+  30%  { transform: translateY(-13px); }
+  50%  { transform: translateY(-20px); }
+  70%  { transform: translateY(-17px); }
+  100% { transform: translateY(-25px); }
+}
+
+.chain-ball {
+  width: 4px;
+  height: 4px;
+  background: #9ca3af;
+  border-radius: 50%;
+}
+
+.chain-pull {
+  width: 6px;
+  height: 8px;
+  background: #9ca3af;
+  border-radius: 2px;
+  margin-top: 1px;
+}
+
+.lightbulb-toggle:hover .chain-pull {
+  transform: scale(1.1);
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .lightbulb-toggle {
+    right: 20px;
+    gap: 6px;
+  }
+  
+  .bulb-svg {
+    width: 38px;
+    height: 57px;
+  }
+  
+  .chain-ball {
+    width: 3px;
+    height: 3px;
+  }
+  
+  .chain-pull {
+    width: 5px;
+    height: 6px;
+  }
+}
