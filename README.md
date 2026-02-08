@@ -1,3 +1,3 @@
-made mostly using AI
+Portfolio Website
 
-Still a WIP
+Last Updated: February 7th 2026
