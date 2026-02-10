@@ -562,11 +562,9 @@ function App() {
 
           {[
             {
-              title: 'Categories Game',
-              tech: ['Node.js', 'Express', 'Socket.IO', 'React', 'Vite'],
-              desc: 'Built a real-time multiplayer web game where 1-4 players compete to name items from a given category within 60 seconds. Niche answers score more points (1-3 points based on commonality). Implemented WebSocket communication using Socket.IO for instant synchronization between players, enabling real-time answer submission and score updates. Features include room-based matchmaking with unique codes, fuzzy string matching using Levenshtein distance to handle typos, and automatic game flow management. Players can see who claimed each answer first, preventing duplicates. Designed a clean React frontend with Vite for fast development, and deployed the full-stack application on Render with automatic wake-up from idle state. Note: The site may take 30-60 seconds to load on first visit as the free hosting service spins up from sleep.',
-              liveUrl: 'https://categoriesgame.onrender.com',
-              githubUrl: 'https://github.com/jakealessi/CategoriesGame',
+              title: 'Custom Memory Allocator',
+              tech: ['C'],
+              desc: 'Built a dynamic memory allocation system from scratch using segregated free lists and quick lists for efficient memory management. Implemented the core functions malloc, free, and realloc with advanced features including block splitting for optimal space utilization, coalescing of adjacent free blocks to reduce fragmentation, and proper alignment support for different data types. Developed comprehensive testing and measurement tools to analyze fragmentation and utilization metrics, verifying the allocator\'s efficiency and performance characteristics.',
             },
             {
               title: 'Stock Arbitrage Bot',
@@ -574,19 +572,28 @@ function App() {
               desc: 'Developed an automation tool to execute trades for reverse split arbitrage opportunities via 10+ brokerage web portals. The bot uses Selenium or existing APIs to navigate and interact with trading interfaces, typically buying stocks that are going through a reverse split. Implemented robust error handling and logging to ensure reliable execution across multiple accounts. Achieved exceptional returns of approximately $600 per account annually from an initial balance of just $10, representing a 60x return on investment.',
             },
             {
-              title: 'Custom Memory Allocator',
-              tech: ['C'],
-              desc: 'Built a dynamic memory allocation system from scratch using segregated free lists and quick lists for efficient memory management. Implemented the core functions malloc, free, and realloc with advanced features including block splitting for optimal space utilization, coalescing of adjacent free blocks to reduce fragmentation, and proper alignment support for different data types. Developed comprehensive testing and measurement tools to analyze fragmentation and utilization metrics, verifying the allocator\'s efficiency and performance characteristics.',
-            },
-            {
               title: 'Playlister',
               tech: ['MongoDB','PostgreSQL', 'Express', 'React', 'Node.js', 'YouTube API'],
               desc: 'Built a full-stack web application for creating and playing YouTube music video playlists, with a flexible backend supporting both MongoDB and PostgreSQL databases. Implemented user authentication with account creation, login, and profile editing including custom avatar uploads. Registered users can create, edit, copy, and delete playlists while guests can browse and play existing playlists. Features include a searchable songs catalog where users can add songs to the system, playlist discovery with multiple search criteria (playlist name, user, song title, artist, year), and sorting options for both playlists and songs. Integrated the YouTube API for seamless video playback with player controls and repeat functionality. Implemented undo/redo capabilities using a transaction stack during playlist editing. Designed modals for playlist editing, playback, and delete confirmations with foolproof UI that hides unavailable actions from unauthorized users. Conducted extensive API testing through Postman to ensure reliability and proper endpoint behavior.',
             },
             {
+              title: 'Categories Game',
+              tech: ['Node.js', 'Express', 'Socket.IO', 'React', 'Vite'],
+              desc: 'Built a real-time multiplayer web game where 1-4 players compete to name items from a given category within 60 seconds. Niche answers score more points (1-3 points based on commonality). Implemented WebSocket communication using Socket.IO for instant synchronization between players, enabling real-time answer submission and score updates. Features include room-based matchmaking with unique codes, fuzzy string matching using Levenshtein distance to handle typos, and automatic game flow management. Players can see who claimed each answer first, preventing duplicates. Designed a clean React frontend with Vite for fast development, and deployed the full-stack application on Render with automatic wake-up from idle state. Note: The site may take 30-60 seconds to load on first visit as the free hosting service spins up from sleep.',
+              liveUrl: 'https://categoriesgame.onrender.com',
+              githubUrl: 'https://github.com/jakealessi/CategoriesGame',
+            },
+            {
               title: 'Academic Calendar Scraper',
               tech: ['Python', 'Playwright'],
               desc: 'Developed a web scraping solution to convert HTML-based university academic calendars into structured, machine-readable formats. Used Playwright with headless Chromium to navigate and extract calendar data from university websites, handling dynamic content and various HTML structures. Implemented Python parsing logic to clean and structure the extracted data into clean JSON format. The system then converts these JSON events into standard iCalendar (.ics) files, making it easy for students to import academic schedules directly into Google Calendar, Outlook, or any calendar application that supports the iCal format.',
+            },
+            {
+              title: 'Super Bowl Box Generator',
+              tech: ['JavaScript', 'HTML', 'CSS'],
+              desc: 'Created a single-page web application for generating and managing 10x10 Super Bowl squares pools. The app runs entirely client-side with no backend, using vanilla JavaScript and local storage for persistence. Features include participant management with customizable box assignments, automatic grid generation with randomized numbers and box assignments, team configuration, pricing and vig calculations, flexible payout split options (including custom percentages), and a clean print view. Implemented validation to ensure exactly 100 boxes are assigned and all payout percentages sum to 100%. The app automatically saves configuration to local storage, allowing users to refresh and return to their setup later. Suitable for static hosting on GitHub Pages.',
+              liveUrl: 'https://jakealessi.github.io/SuperBowlBoxGenerator/',
+              githubUrl: 'https://github.com/jakealessi/SuperBowlBoxGenerator',
             },
           ].map((project, i) => (
             <FadeIn key={project.title} delay={0.05 * (i + 1)}>
