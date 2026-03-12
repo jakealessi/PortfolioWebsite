@@ -413,6 +413,12 @@ function Portfolio() {
 
           {[
             {
+              title: 'Poker Bankroll AI',
+              tech: ['Swift', 'SwiftUI', 'StoreKit', 'iCloud', 'Charts', 'AI APIs'],
+              desc: 'Built a production iOS app for poker players to track bankroll performance and session results across cash games, tournaments, sit & gos, home games, and online play. Implemented natural-language AI session logging, structured manual session entry, and update flows with validation to prevent incomplete logs. Added bankroll analytics including cumulative profit, win/loss trends, monthly views, and variant-level breakdowns, plus an odds calculator for hand equity analysis with improved performance and tie handling. Developed premium subscription flows with StoreKit, data export/backup features, session and hand sharing, and robust UX improvements for dark mode and mobile usability. Recently released on the App Store.',
+              liveUrl: 'https://apps.apple.com/app/id6759470443',
+            },
+            {
               title: 'Custom Memory Allocator',
               tech: ['C'],
               desc: 'Built a dynamic memory allocation system from scratch using segregated free lists and quick lists for efficient memory management. Implemented the core functions malloc, free, and realloc with advanced features including block splitting for optimal space utilization, coalescing of adjacent free blocks to reduce fragmentation, and proper alignment support for different data types. Developed comprehensive testing and measurement tools to analyze fragmentation and utilization metrics, verifying the allocator\'s efficiency and performance characteristics.',
