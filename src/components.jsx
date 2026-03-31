@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Simple fade in on scroll
 export function FadeIn({ children, delay = 0 }) {
@@ -6,6 +6,11 @@ export function FadeIn({ children, delay = 0 }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true);
+      return undefined;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -36,10 +41,42 @@ export function FadeIn({ children, delay = 0 }) {
 // Lightbulb theme toggle
 export function LightbulbToggle({ isDark, onToggle }) {
   const [isPulling, setIsPulling] = useState(false);
-  const [bulbOn, setBulbOn] = useState(!isDark);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [bulbOn, setBulbOn] = useState(() => !isDark);
   const bulbRef = useRef(null);
+  const overlayRef = useRef(null);
+  const toggleTimeoutRef = useRef(null);
+  const pullTimeoutRef = useRef(null);
+  const animationFrameRef = useRef(null);
+
+  useEffect(() => {
+    setBulbOn(!isDark);
+  }, [isDark]);
+
+  useEffect(() => {
+    return () => {
+      if (toggleTimeoutRef.current !== null) {
+        window.clearTimeout(toggleTimeoutRef.current);
+      }
+
+      if (pullTimeoutRef.current !== null) {
+        window.clearTimeout(pullTimeoutRef.current);
+      }
+
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+      }
+
+      overlayRef.current?.remove();
+    };
+  }, []);
 
   const handleClick = () => {
+    if (isAnimating || !bulbRef.current) {
+      return;
+    }
+
+    setIsAnimating(true);
     setIsPulling(true);
 
     const turningOn = !bulbOn;
@@ -55,6 +92,7 @@ export function LightbulbToggle({ isDark, onToggle }) {
       Math.max(cy, window.innerHeight - cy) ** 2
     );
 
+    overlayRef.current?.remove();
     const overlay = document.createElement('div');
     overlay.className = 'theme-reveal-overlay';
     overlay.style.setProperty('--reveal-cx', `${cx}px`);
@@ -62,26 +100,42 @@ export function LightbulbToggle({ isDark, onToggle }) {
     overlay.style.setProperty('--reveal-radius', `${maxDist}px`);
     overlay.style.background = turningOn ? '#fafafa' : '#0a0a0a';
     document.body.appendChild(overlay);
+    overlayRef.current = overlay;
 
-    requestAnimationFrame(() => {
+    animationFrameRef.current = window.requestAnimationFrame(() => {
       overlay.classList.add('expanding');
     });
 
-    setTimeout(() => {
+    toggleTimeoutRef.current = window.setTimeout(() => {
       onToggle();
       overlay.remove();
+      if (overlayRef.current === overlay) {
+        overlayRef.current = null;
+      }
+      setIsAnimating(false);
+      animationFrameRef.current = null;
+      toggleTimeoutRef.current = null;
     }, 300);
 
-    setTimeout(() => {
+    pullTimeoutRef.current = window.setTimeout(() => {
       setIsPulling(false);
+      pullTimeoutRef.current = null;
     }, 500);
   };
 
   const bulbColor = bulbOn ? '#f5b820' : '#d1d5db';
   const filamentColor = bulbOn ? '#78350f' : '#374151';
+  const label = isDark ? 'Turn on the light theme' : 'Turn off the light theme';
 
   return (
-    <div className="lightbulb-toggle" onClick={handleClick} title={isDark ? "Turn on the light" : "Turn off the light"}>
+    <button
+      type="button"
+      className="lightbulb-toggle"
+      onClick={handleClick}
+      title={label}
+      aria-label={label}
+      aria-pressed={!isDark}
+    >
       <svg ref={bulbRef} className={`bulb-svg ${bulbOn ? 'on' : ''}`} viewBox="0 0 60 90" width="50" height="75">
         {bulbOn && (
           <defs>
@@ -114,6 +168,6 @@ export function LightbulbToggle({ isDark, onToggle }) {
         ))}
         <div className="chain-pull" />
       </div>
-    </div>
+    </button>
   );
 }

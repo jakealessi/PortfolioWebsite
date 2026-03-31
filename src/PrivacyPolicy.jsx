@@ -1,21 +1,13 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FadeIn, LightbulbToggle } from './components';
+import { useThemePreference } from './theme';
 
 export default function PrivacyPolicy() {
-  const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('theme');
-    return saved ? saved === 'dark' : true;
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  }, [isDark]);
+  const [isDark, setIsDark] = useThemePreference();
 
   return (
     <div className="app">
-      <LightbulbToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
+      <LightbulbToggle isDark={isDark} onToggle={() => setIsDark((prev) => !prev)} />
       <main className="main" style={{ paddingTop: '4rem', marginLeft: 0, maxWidth: '100%' }}>
         <section id="privacy-policy" className="hero">
           <FadeIn>
