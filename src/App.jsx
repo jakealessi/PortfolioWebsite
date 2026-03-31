@@ -145,7 +145,7 @@ const PROJECTS = [
     title: 'AcademicCalendar.com',
     tech: ['Python', 'Vanilla JS', 'Playwright', 'pdfplumber', 'ICS', 'HTTP APIs'],
     description:
-      'Built AcademicCalendar.com into a full academic-calendar hub with a Python backend, a vanilla JavaScript frontend, and a scraping pipeline that ingests HTML pages, full school websites, PDFs, and direct ICS feeds. Added normalization and export logic that produces consistent JSON and downloadable ICS files, plus QA, source-help, and ops reports for monitoring coverage across the registry. Also built registry-generation and refresh scripts that batch scrape schools, autotune weak sources, and rebuild the manifests served by the site.',
+      'Built a scraper pipeline that turns academic calendars published as HTML pages, full school websites, PDFs, and direct ICS feeds into normalized calendar data. Added Playwright-based extraction, pdfplumber parsing, normalization and export logic for consistent JSON and downloadable ICS files, plus QA, source-help, and ops reports for monitoring source quality across the registry. Also built registry-generation and refresh scripts that batch scrape schools, autotune weak sources, and rebuild the manifests that power AcademicCalendar.com, with the website frontend itself currently still in progress.',
     statusLabel: 'In Progress',
     statusNote:
       "I'm currently building the frontend, with the main focus on search, filtering, school detail pages, and making coverage and data quality easier to understand at a glance.",
@@ -358,6 +358,9 @@ function ProjectStatusFlag({ label, note }) {
       <button type="button" className="status-flag" aria-describedby={tooltipId}>
         {label}
       </button>
+      <span className="status-hint" aria-hidden="true">
+        Hover for details
+      </span>
       <span id={tooltipId} role="tooltip" className="status-tooltip">
         {note}
       </span>

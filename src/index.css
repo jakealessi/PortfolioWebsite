@@ -394,6 +394,8 @@ section:last-of-type {
 .status-flag-wrapper {
   position: relative;
   display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .status-flag {
@@ -409,6 +411,13 @@ section:last-of-type {
   border-radius: 999px;
   cursor: help;
   line-height: 1;
+}
+
+.status-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .status-flag:focus-visible {
@@ -587,6 +596,10 @@ section:last-of-type {
     left: auto;
     right: 0;
     width: min(16rem, calc(100vw - 3rem));
+  }
+
+  .status-hint {
+    font-size: 0.65rem;
   }
 }
 
