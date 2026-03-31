@@ -142,10 +142,10 @@ const PROJECTS = [
     githubUrl: 'https://github.com/jakealessi/CategoriesGame',
   },
   {
-    title: 'AcademicCalendar.com',
+    title: 'Academic Calendar Scraper',
     tech: ['Python', 'Vanilla JS', 'Playwright', 'pdfplumber', 'ICS', 'HTTP APIs'],
     description:
-      'Built a scraper pipeline that turns academic calendars published as HTML pages, full school websites, PDFs, and direct ICS feeds into normalized calendar data. Added Playwright-based extraction, pdfplumber parsing, normalization and export logic for consistent JSON and downloadable ICS files, plus QA, source-help, and ops reports for monitoring source quality across the registry. Also built registry-generation and refresh scripts that batch scrape schools, autotune weak sources, and rebuild the manifests that power AcademicCalendar.com, with the website frontend itself currently still in progress.',
+      'Built an academic-calendar scraper that ingests HTML pages, full school websites, PDFs, and direct ICS feeds and turns them into normalized calendar data. Added Playwright-based extraction, pdfplumber parsing, normalization and export logic for consistent JSON and downloadable ICS files, plus QA, source-help, and ops reports for monitoring source quality across the registry. Also built registry-generation and refresh scripts that batch scrape schools, autotune weak sources, and rebuild the manifests, with the website frontend built on top of the scraper still in progress.',
     statusLabel: 'In Progress',
     statusNote:
       "I'm currently building the frontend, with the main focus on search, filtering, school detail pages, and making coverage and data quality easier to understand at a glance.",
