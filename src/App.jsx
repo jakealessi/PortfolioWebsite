@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import PrivacyPolicy from './PrivacyPolicy';
 import Support from './Support';
@@ -7,7 +7,6 @@ import { useThemePreference } from './theme';
 
 const NAV_SECTIONS = [
   { id: 'about', label: 'About' },
-  { id: 'current-work', label: 'Current' },
   { id: 'experience', label: 'Experience' },
   { id: 'education', label: 'Education' },
   { id: 'projects', label: 'Projects' },
@@ -39,29 +38,6 @@ const SOCIAL_LINKS = [
   },
 ];
 
-const CURRENT_WORK_ITEMS = [
-  {
-    title: 'AcademicCalendar.com Frontend',
-    subtitle: 'Turning the data pipeline into a polished user-facing product',
-    badge: 'Active Build',
-    paragraphs: [
-      "I'm currently building the frontend for AcademicCalendar.com so the normalized calendar data, backend APIs, and download workflows feel as polished as the underlying scraping system.",
-      'The focus right now is on search, filtering, school detail pages, and product cues that make coverage, freshness, and data quality easy to understand at a glance.',
-    ],
-    tech: ['Frontend UX', 'Search & Filters', 'Product Design'],
-  },
-  {
-    title: 'Poker Bankroll AI Marketing',
-    subtitle: 'Sharpening how the product is positioned after launch',
-    badge: 'Growth Work',
-    paragraphs: [
-      "I'm also working on the marketing side of Poker Bankroll AI now that the app is live, with an emphasis on clearer positioning and stronger messaging for players who want serious bankroll and session tracking.",
-      'That includes refining App Store copy, tightening the value proposition around AI-assisted logging and analytics, and thinking more deliberately about discoverability and first impression.',
-    ],
-    tech: ['App Store', 'Messaging', 'Product Positioning'],
-  },
-];
-
 const EXPERIENCE_ITEMS = [
   {
     assetName: 'atlantic-pc-logo.webp',
@@ -79,6 +55,30 @@ const EXPERIENCE_ITEMS = [
   },
 ];
 
+const COURSEWORK = [
+  'CSE 114: Introduction to Object-Oriented Programming',
+  'CSE 214: Data Structures',
+  'CSE 215: Foundations of Computer Science',
+  'CSE 216: Programming Abstractions',
+  'CSE 220: Systems Fundamentals I',
+  'CSE 303: Theory of Computation',
+  'CSE 316: Software Development',
+  'CSE 320: Systems Fundamentals II',
+  'CSE 351: Introduction to Data Science',
+  'CSE 353: Machine Learning',
+  'CSE 371: Logic',
+  'CSE 373: Analysis of Algorithms',
+  'CSE 416: Software Engineering',
+  'CSE 312: Legal Issues in Computing',
+  'CSE 300: Technical Communications',
+  'AMS 210: Applied Linear Algebra',
+  'AMS 261: Applied Calculus III',
+  'AMS 301: Finite Mathematical Structures',
+  'AMS 310: Survey of Probability and Statistics',
+  'AMS 315: Data Analysis',
+  'AP Credit: Calculus I and Calculus II',
+];
+
 const PROJECTS = [
   {
     title: 'Poker Bankroll AI',
@@ -88,6 +88,9 @@ const PROJECTS = [
     liveUrl: 'https://apps.apple.com/app/id6759470443',
     liveLabel: 'iOS App Store',
     githubUrl: 'https://github.com/jakealessi/PokerTrackerIOS',
+    statusLabel: 'In Progress',
+    statusNote:
+      "I'm currently focused on the marketing side of the app, including tighter App Store messaging, clearer positioning, and stronger communication of the AI-assisted logging value proposition.",
   },
   {
     title: 'Custom Memory Allocator',
@@ -143,6 +146,9 @@ const PROJECTS = [
     tech: ['Python', 'Vanilla JS', 'Playwright', 'pdfplumber', 'ICS', 'HTTP APIs'],
     description:
       'Built AcademicCalendar.com into a full academic-calendar hub with a Python backend, a vanilla JavaScript frontend, and a scraping pipeline that ingests HTML pages, full school websites, PDFs, and direct ICS feeds. Added normalization and export logic that produces consistent JSON and downloadable ICS files, plus QA, source-help, and ops reports for monitoring coverage across the registry. Also built registry-generation and refresh scripts that batch scrape schools, autotune weak sources, and rebuild the manifests served by the site.',
+    statusLabel: 'In Progress',
+    statusNote:
+      "I'm currently building the frontend, with the main focus on search, filtering, school detail pages, and making coverage and data quality easier to understand at a glance.",
   },
   {
     title: 'Super Bowl Box Generator',
@@ -344,31 +350,18 @@ function LogoLockup({ assetName, assetAlt, title, subtitle }) {
   );
 }
 
-function CurrentWorkCard({ item, delay }) {
+function ProjectStatusFlag({ label, note }) {
+  const tooltipId = useId();
+
   return (
-    <FadeIn delay={delay}>
-      <article className="card current-work-card">
-        <div className="card-header">
-          <div>
-            <h3 className="card-title">{item.title}</h3>
-            <p className="card-subtitle">{item.subtitle}</p>
-          </div>
-          <span className="current-work-badge">{item.badge}</span>
-        </div>
-        <div className="card-content copy-stack current-work-content">
-          {item.paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-          <div className="project-tech">
-            {item.tech.map((tag) => (
-              <span key={tag} className="tech-tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      </article>
-    </FadeIn>
+    <span className="status-flag-wrapper">
+      <button type="button" className="status-flag" aria-describedby={tooltipId}>
+        {label}
+      </button>
+      <span id={tooltipId} role="tooltip" className="status-tooltip">
+        {note}
+      </span>
+    </span>
   );
 }
 
@@ -377,7 +370,12 @@ function ProjectCard({ project, delay }) {
     <FadeIn delay={delay}>
       <div className="card">
         <div className="card-header">
-          <h3 className="card-title">{project.title}</h3>
+          <div className="project-title-row">
+            <h3 className="card-title">{project.title}</h3>
+            {project.statusNote ? (
+              <ProjectStatusFlag label={project.statusLabel || 'In Progress'} note={project.statusNote} />
+            ) : null}
+          </div>
         </div>
         <div className="card-content copy-stack">
           <p>{project.description}</p>
@@ -534,19 +532,6 @@ function Portfolio() {
           </FadeIn>
         </section>
 
-        <section id="current-work">
-          <SectionHeader
-            title="What I&apos;m Currently Working On"
-            lead="The two areas getting most of my attention right now are product-facing frontend work and sharpening how finished software is positioned once it is live."
-          />
-
-          <div className="current-work-grid">
-            {CURRENT_WORK_ITEMS.map((item, index) => (
-              <CurrentWorkCard key={item.title} item={item} delay={0.05 * (index + 1)} />
-            ))}
-          </div>
-        </section>
-
         <section id="experience">
           <SectionHeader title="Experience" />
 
@@ -593,10 +578,13 @@ function Portfolio() {
                   <strong>GPA:</strong> 3.70/4.0
                 </p>
                 <p>
-                  <strong>Relevant Coursework:</strong> Object-Oriented Programming, Data Structures, Systems
-                  Fundamentals I and II, Software Development, Software Engineering, Data Science, Machine
-                  Learning, Analysis of Algorithms, Logic, Data Analysis, and Probability and Statistics.
+                  <strong>Coursework:</strong>
                 </p>
+                <div className="coursework-list">
+                  {COURSEWORK.map((course) => (
+                    <span key={course}>{course}</span>
+                  ))}
+                </div>
                 <p>Member of the Algorithms and Computational Geometry groups.</p>
               </div>
             </div>
@@ -604,11 +592,6 @@ function Portfolio() {
         </section>
 
         <section id="projects">
-          <SectionHeader
-            title="Selected Projects"
-            lead="A mix of iOS, systems, automation, and full-stack work, with the strongest emphasis on products that solve a real operational problem or turn a messy process into something usable."
-          />
-
           {PROJECTS.map((project, index) => (
             <ProjectCard key={project.title} project={project} delay={0.05 * (index + 1)} />
           ))}
