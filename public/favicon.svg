@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="16" fill="#0a0a0a"/>
-  <text x="50" y="65" font-family="system-ui, sans-serif" font-size="40" font-weight="700" text-anchor="middle" fill="#fafafa">JA</text>
+  <rect width="100" height="100" rx="22" fill="#2563eb"/>
+  <path d="M27 34 13 50l14 16" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M73 34 87 50 73 66" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M58 25 42 75" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linecap="round"/>
 </svg>
-
-

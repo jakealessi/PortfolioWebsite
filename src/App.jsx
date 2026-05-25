@@ -44,7 +44,7 @@ const EXPERIENCE_ITEMS = [
     assetAlt: 'Atlantic PC',
     title: 'Cybersecurity & IT Intern',
     subtitle: 'Atlantic PC · Great Neck, NY',
-    date: 'May 2025 – Dec 2025',
+    date: 'May 2025 – Sep 2025',
     bullets: [
       'Automated endpoint setup with PowerShell and Bash, reducing manual configuration time and improving deployment consistency across client environments.',
       'Deployed and hardened PCs, servers, and network equipment for business clients, ensuring secure and dependable setups aligned with best practices.',
@@ -122,10 +122,21 @@ const PROJECTS = [
     ),
   },
   {
-    title: 'Stock Arbitrage Bot',
-    tech: ['Python', 'Selenium', 'Automation'],
-    description:
-      'Built and deployed an automation pipeline for reverse-split arbitrage across 10+ brokerage portals using Selenium and broker-specific integrations. Added structured logging, defensive error handling, and failure-recovery workflows to keep multi-account execution reliable across inconsistent trading interfaces. Generated approximately $600 in annual profit per account from a $10 starting balance.',
+    title: 'FreebieBot',
+    tech: ['Node.js', 'SQLite', 'REST APIs', 'Web Scraping', 'Concurrency'],
+    description: (
+      <>
+        Built a Discord bot that scans Shopify storefronts for free products matching user keywords and
+        returns both the product page and a prefilled cart checkout link. Designed the scraper around public{' '}
+        <code>products.json</code> feeds with paginated ingestion, availability checks, junk filtering, and{' '}
+        <code>cart.js</code> validation to confirm cart currency and pricing. Added SQLite backed background
+        jobs with resumable page leases and a BFS style round robin scheduler, allowing scans to rotate across
+        many storefronts instead of overloading one domain. Implemented storefront warmups, retry and backoff
+        handling, and automated host exclusions to keep large scans moving through blocked or rate limited
+        feeds. In real use, the bot has surfaced over $5,000 MSRP in free products that were checked out and
+        delivered.
+      </>
+    ),
   },
   {
     title: 'Playlister',
@@ -161,10 +172,13 @@ const PROJECTS = [
 ];
 
 const ABOUT_ME_PARAGRAPHS = [
-  'When I am not coding or working on school projects, I usually gravitate toward things that are strategic, competitive, or just a little off the beaten path.',
-  'I keep up with pop culture through movies, books, and especially music. My vinyl collection keeps growing, and I try to listen to at least one new album every week. Right now, my favorite is Vices by Weiland.',
-  'I am also very competitive, so a lot of my free time ends up around games. I play strategy games like Scrabble, Risk, chess, and poker, along with competitive games like Rocket League and Marvel Rivals. On the sports side, I mostly play pickup basketball and soccer.',
-  'I also genuinely enjoy spotting edge cases in the real world, not just in software. That often shows up as reselling, noticing pricing mistakes, or taking advantage of short-lived marketplace quirks. It scratches the same itch as coding: noticing inefficiencies early and moving quickly before everyone else catches on.',
+  <>
+    Outside of school, I spend a lot of time listening to music. I collect vinyl and try to listen to at least
+    one new album every week, which has become one of my favorite ways to find artists and albums I might not
+    have discovered otherwise. Right now, my favorite album is <em>Vices</em> by Weiland.
+  </>,
+  "I'm also really into games, especially ones that are competitive or strategy-based. I like Scrabble, poker, and chess because each one makes you think in a different way, whether it is planning ahead, recognizing patterns, or making the best decision with limited information. I also play online games like Rocket League and Counter-Strike because they are fast-paced, competitive, and fun to improve at over time.",
+  "Outside of that, I enjoy pickup basketball and fishing. Basketball gives me a way to stay active and compete with friends, while fishing is more relaxed and gives me a chance to slow down for a bit.",
 ];
 
 function BlurText({ text, delay = 0, className = '' }) {
@@ -505,8 +519,8 @@ function Portfolio() {
 
           <FadeIn delay={0.4}>
             <p className="tagline">
-              Computer Science and Applied Mathematics double major interested in automation, arbitrage,
-              edge cases, and optimizing messy processes.
+              Computer Science and Applied Mathematics student interested in automation, backend systems,
+              data-driven tools, and optimizing messy real-world processes.
             </p>
           </FadeIn>
 
@@ -578,7 +592,7 @@ function Portfolio() {
               </div>
               <div className="card-content copy-stack">
                 <p>
-                  <strong>GPA:</strong> 3.70/4.0
+                  <strong>GPA:</strong> 3.74/4.0
                 </p>
                 <p>
                   <strong>Coursework:</strong>
