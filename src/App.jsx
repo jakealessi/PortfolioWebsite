@@ -93,6 +93,23 @@ const PROJECTS = [
       "I'm currently focused on the marketing side of the app, including tighter App Store messaging, clearer positioning, and stronger communication of the AI-assisted logging value proposition.",
   },
   {
+    title: 'FreebieBot',
+    tech: ['Node.js', 'SQLite', 'REST APIs', 'Web Scraping', 'Concurrency'],
+    description: (
+      <>
+        Built a Discord bot that scans Shopify storefronts for free products matching user keywords and
+        returns both the product page and a prefilled cart checkout link. Designed the scraper around public{' '}
+        <code>products.json</code> feeds with paginated ingestion, availability checks, junk filtering, and{' '}
+        <code>cart.js</code> validation to confirm cart currency and pricing. Added SQLite backed background
+        jobs with resumable page leases and a BFS style round robin scheduler, allowing scans to rotate across
+        many storefronts instead of overloading one domain. Implemented storefront warmups, retry and backoff
+        handling, and automated host exclusions to keep large scans moving through blocked or rate limited
+        feeds. In real use, the bot has surfaced over $5,000 MSRP in free products that were checked out and
+        delivered.
+      </>
+    ),
+  },
+  {
     title: 'Custom Memory Allocator',
     tech: ['C', 'Memory Management', 'Systems Programming'],
     description: (
@@ -118,23 +135,6 @@ const PROJECTS = [
         without breaking backward compatibility, and reduced the code footprint by approximately 50% through
         modularization. Also recommended incremental modernization steps the business can adopt without
         disrupting operations.
-      </>
-    ),
-  },
-  {
-    title: 'FreebieBot',
-    tech: ['Node.js', 'SQLite', 'REST APIs', 'Web Scraping', 'Concurrency'],
-    description: (
-      <>
-        Built a Discord bot that scans Shopify storefronts for free products matching user keywords and
-        returns both the product page and a prefilled cart checkout link. Designed the scraper around public{' '}
-        <code>products.json</code> feeds with paginated ingestion, availability checks, junk filtering, and{' '}
-        <code>cart.js</code> validation to confirm cart currency and pricing. Added SQLite backed background
-        jobs with resumable page leases and a BFS style round robin scheduler, allowing scans to rotate across
-        many storefronts instead of overloading one domain. Implemented storefront warmups, retry and backoff
-        handling, and automated host exclusions to keep large scans moving through blocked or rate limited
-        feeds. In real use, the bot has surfaced over $5,000 MSRP in free products that were checked out and
-        delivered.
       </>
     ),
   },
