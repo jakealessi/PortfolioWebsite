@@ -50,7 +50,6 @@ const EXPERIENCE_ITEMS = [
       'Deployed and hardened PCs, servers, and network equipment for business clients, ensuring secure and dependable setups aligned with best practices.',
       'Supported Azure and Microsoft 365 administration, including provisioning, access policies, and issue resolution across client tenants.',
       'Worked with senior IT staff to troubleshoot escalated issues and implement fixes that balanced security, usability, and client requirements.',
-      'Internship extended into the fall semester based on performance and the ability to handle increasingly complex technical work independently.',
     ],
   },
 ];
