@@ -278,6 +278,15 @@ section:last-of-type {
   margin-top: 0.125rem;
 }
 
+.card-subtitle-link {
+  display: inline-block;
+  transition: color 0.15s ease;
+}
+
+.card-subtitle-link:hover {
+  color: var(--accent);
+}
+
 .card-date {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
@@ -332,6 +341,23 @@ section:last-of-type {
   object-fit: contain;
 }
 
+.logo-badge-square {
+  border: none;
+  background: transparent;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.logo-badge-square img {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  transform: scale(1.18);
+}
+
 .copy-stack {
   display: grid;
   gap: 0.9rem;
@@ -357,6 +383,26 @@ section:last-of-type {
   display: grid;
   gap: 0.2rem;
   font-size: 0.9rem;
+}
+
+.coursework-link {
+  color: var(--text-secondary);
+  width: fit-content;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.coursework-link:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+.coursework-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .copy-stack .project-tech,

@@ -40,10 +40,24 @@ const SOCIAL_LINKS = [
 
 const EXPERIENCE_ITEMS = [
   {
+    assetName: 'curbwaste-logo.png',
+    assetAlt: 'CurbWaste',
+    logoBadgeClassName: 'logo-badge-square',
+    title: 'Software Engineer Intern',
+    subtitle: 'CurbWaste · New York, NY',
+    subtitleUrl: 'https://www.curbwaste.com',
+    date: 'Jun 2026 – Aug 2026',
+    bullets: [
+      'Software Engineer Intern at CurbWaste, a Series B software startup building an operating system for independent waste haulers.',
+      'Contributing to software that helps modernize dispatching, routing, billing, customer management, and day-to-day operations across the waste industry.',
+    ],
+  },
+  {
     assetName: 'atlantic-pc-logo.webp',
     assetAlt: 'Atlantic PC',
     title: 'Cybersecurity & IT Intern',
     subtitle: 'Atlantic PC · Great Neck, NY',
+    subtitleUrl: 'https://atlanticny.com',
     date: 'May 2025 – Sep 2025',
     bullets: [
       'Automated endpoint setup with PowerShell and Bash, reducing manual configuration time and improving deployment consistency across client environments.',
@@ -54,28 +68,38 @@ const EXPERIENCE_ITEMS = [
   },
 ];
 
+const cseCourseUrl = (courseNumber) =>
+  `https://www.cs.stonybrook.edu/students/undergraduate-studies/courses/cse${courseNumber}`;
+
+const amsCourseUrl = (courseNumber) =>
+  `https://www.stonybrook.edu/ams/academics/undergraduate/ug-courses/ams-${courseNumber}.html`;
+
 const COURSEWORK = [
-  'CSE 114: Introduction to Object-Oriented Programming',
-  'CSE 214: Data Structures',
-  'CSE 215: Foundations of Computer Science',
-  'CSE 216: Programming Abstractions',
-  'CSE 220: Systems Fundamentals I',
-  'CSE 303: Theory of Computation',
-  'CSE 316: Software Development',
-  'CSE 320: Systems Fundamentals II',
-  'CSE 351: Introduction to Data Science',
-  'CSE 353: Machine Learning',
-  'CSE 371: Logic',
-  'CSE 373: Analysis of Algorithms',
-  'CSE 416: Software Engineering',
-  'CSE 312: Legal Issues in Computing',
-  'CSE 300: Technical Communications',
-  'AMS 210: Applied Linear Algebra',
-  'AMS 261: Applied Calculus III',
-  'AMS 301: Finite Mathematical Structures',
-  'AMS 310: Survey of Probability and Statistics',
-  'AMS 315: Data Analysis',
-  'AP Credit: Calculus I and Calculus II',
+  { label: 'CSE 114: Introduction to Object-Oriented Programming', href: cseCourseUrl('114') },
+  { label: 'CSE 214: Data Structures', href: cseCourseUrl('214') },
+  { label: 'CSE 215: Foundations of Computer Science', href: cseCourseUrl('215') },
+  { label: 'CSE 216: Programming Abstractions', href: cseCourseUrl('216') },
+  { label: 'CSE 220: Systems Fundamentals I', href: cseCourseUrl('220') },
+  { label: 'CSE 303: Theory of Computation', href: cseCourseUrl('303') },
+  { label: 'CSE 316: Software Development', href: cseCourseUrl('316') },
+  { label: 'CSE 320: Systems Fundamentals II', href: cseCourseUrl('320') },
+  { label: 'CSE 351: Introduction to Data Science', href: cseCourseUrl('351') },
+  { label: 'CSE 353: Machine Learning', href: cseCourseUrl('353') },
+  { label: 'CSE 371: Logic', href: cseCourseUrl('371') },
+  { label: 'CSE 373: Analysis of Algorithms', href: cseCourseUrl('373') },
+  { label: 'CSE 416: Software Engineering', href: cseCourseUrl('416') },
+  { label: 'CSE 312: Legal Issues in Computing', href: cseCourseUrl('312') },
+  { label: 'CSE 300: Technical Communications', href: cseCourseUrl('300') },
+  { label: 'AMS 210: Applied Linear Algebra', href: amsCourseUrl('210') },
+  { label: 'AMS 261: Applied Calculus III', href: amsCourseUrl('261') },
+  { label: 'AMS 301: Finite Mathematical Structures', href: amsCourseUrl('301') },
+  { label: 'AMS 310: Survey of Probability and Statistics', href: amsCourseUrl('310') },
+  { label: 'AMS 311: Probability Theory', href: amsCourseUrl('311') },
+  { label: 'AMS 315: Data Analysis', href: amsCourseUrl('315') },
+  {
+    label: 'AP Credit: Calculus I and Calculus II',
+    href: 'https://www.stonybrook.edu/undergraduate-admissions/apply/ap-college-credit.php',
+  },
 ];
 
 const PROJECTS = [
@@ -349,15 +373,21 @@ function SectionHeader({ title, lead, delay = 0.02 }) {
   );
 }
 
-function LogoLockup({ assetName, assetAlt, title, subtitle }) {
+function LogoLockup({ assetName, assetAlt, logoBadgeClassName, title, subtitle, subtitleUrl }) {
   return (
     <div className="identity-block">
-      <div className="logo-badge">
+      <div className={['logo-badge', logoBadgeClassName].filter(Boolean).join(' ')}>
         <img src={`${import.meta.env.BASE_URL}${assetName}`} alt={assetAlt} />
       </div>
       <div>
         <h3 className="card-title">{title}</h3>
-        <p className="card-subtitle">{subtitle}</p>
+        {subtitleUrl ? (
+          <a href={subtitleUrl} target="_blank" rel="noopener noreferrer" className="card-subtitle card-subtitle-link">
+            {subtitle}
+          </a>
+        ) : (
+          <p className="card-subtitle">{subtitle}</p>
+        )}
       </div>
     </div>
   );
@@ -558,8 +588,10 @@ function Portfolio() {
                   <LogoLockup
                     assetName={experience.assetName}
                     assetAlt={experience.assetAlt}
+                    logoBadgeClassName={experience.logoBadgeClassName}
                     title={experience.title}
                     subtitle={experience.subtitle}
+                    subtitleUrl={experience.subtitleUrl}
                   />
                   <span className="card-date">{experience.date}</span>
                 </div>
@@ -598,7 +630,15 @@ function Portfolio() {
                 </p>
                 <div className="coursework-list">
                   {COURSEWORK.map((course) => (
-                    <span key={course}>{course}</span>
+                    <a
+                      key={course.label}
+                      href={course.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="coursework-link"
+                    >
+                      {course.label}
+                    </a>
                   ))}
                 </div>
                 <p>Member of the Algorithms and Computational Geometry groups.</p>
