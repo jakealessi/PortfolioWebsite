@@ -96,10 +96,7 @@ const COURSEWORK = [
   { label: 'AMS 310: Survey of Probability and Statistics', href: amsCourseUrl('310') },
   { label: 'AMS 311: Probability Theory', href: amsCourseUrl('311') },
   { label: 'AMS 315: Data Analysis', href: amsCourseUrl('315') },
-  {
-    label: 'AP Credit: Calculus I and Calculus II',
-    href: 'https://www.stonybrook.edu/undergraduate-admissions/apply/ap-college-credit.php',
-  },
+  { label: 'AP Credit: Calculus I and Calculus II' },
 ];
 
 const PROJECTS = [
@@ -629,17 +626,21 @@ function Portfolio() {
                   <strong>Coursework:</strong>
                 </p>
                 <div className="coursework-list">
-                  {COURSEWORK.map((course) => (
-                    <a
-                      key={course.label}
-                      href={course.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="coursework-link"
-                    >
-                      {course.label}
-                    </a>
-                  ))}
+                  {COURSEWORK.map((course) =>
+                    course.href ? (
+                      <a
+                        key={course.label}
+                        href={course.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="coursework-link"
+                      >
+                        {course.label}
+                      </a>
+                    ) : (
+                      <span key={course.label}>{course.label}</span>
+                    ),
+                  )}
                 </div>
                 <p>Member of the Algorithms and Computational Geometry groups.</p>
               </div>
