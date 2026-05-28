@@ -55,6 +55,7 @@ const EXPERIENCE_ITEMS = [
   {
     assetName: 'atlantic-pc-logo.webp',
     assetAlt: 'Atlantic PC',
+    logoBadgeClassName: 'logo-badge-square logo-badge-atlantic-pc',
     title: 'Cybersecurity & IT Intern',
     subtitle: 'Atlantic PC · Great Neck, NY',
     subtitleUrl: 'https://atlanticny.com',
@@ -74,29 +75,39 @@ const cseCourseUrl = (courseNumber) =>
 const amsCourseUrl = (courseNumber) =>
   `https://www.stonybrook.edu/ams/academics/undergraduate/ug-courses/ams-${courseNumber}.html`;
 
-const COURSEWORK = [
-  { label: 'CSE 114: Introduction to Object-Oriented Programming', href: cseCourseUrl('114') },
-  { label: 'CSE 214: Data Structures', href: cseCourseUrl('214') },
-  { label: 'CSE 215: Foundations of Computer Science', href: cseCourseUrl('215') },
-  { label: 'CSE 216: Programming Abstractions', href: cseCourseUrl('216') },
-  { label: 'CSE 220: Systems Fundamentals I', href: cseCourseUrl('220') },
-  { label: 'CSE 303: Theory of Computation', href: cseCourseUrl('303') },
-  { label: 'CSE 316: Software Development', href: cseCourseUrl('316') },
-  { label: 'CSE 320: Systems Fundamentals II', href: cseCourseUrl('320') },
-  { label: 'CSE 351: Introduction to Data Science', href: cseCourseUrl('351') },
-  { label: 'CSE 353: Machine Learning', href: cseCourseUrl('353') },
-  { label: 'CSE 371: Logic', href: cseCourseUrl('371') },
-  { label: 'CSE 373: Analysis of Algorithms', href: cseCourseUrl('373') },
-  { label: 'CSE 416: Software Engineering', href: cseCourseUrl('416') },
-  { label: 'CSE 312: Legal Issues in Computing', href: cseCourseUrl('312') },
-  { label: 'CSE 300: Technical Communications', href: cseCourseUrl('300') },
-  { label: 'AMS 210: Applied Linear Algebra', href: amsCourseUrl('210') },
-  { label: 'AMS 261: Applied Calculus III', href: amsCourseUrl('261') },
-  { label: 'AMS 301: Finite Mathematical Structures', href: amsCourseUrl('301') },
-  { label: 'AMS 310: Survey of Probability and Statistics', href: amsCourseUrl('310') },
-  { label: 'AMS 311: Probability Theory', href: amsCourseUrl('311') },
-  { label: 'AMS 315: Data Analysis', href: amsCourseUrl('315') },
-  { label: 'AP Credit: Calculus I and Calculus II' },
+const COURSEWORK_GROUPS = [
+  {
+    title: 'Computer Science',
+    courses: [
+      { label: 'CSE 114: Introduction to Object-Oriented Programming', href: cseCourseUrl('114') },
+      { label: 'CSE 214: Data Structures', href: cseCourseUrl('214') },
+      { label: 'CSE 215: Foundations of Computer Science', href: cseCourseUrl('215') },
+      { label: 'CSE 216: Programming Abstractions', href: cseCourseUrl('216') },
+      { label: 'CSE 220: Systems Fundamentals I', href: cseCourseUrl('220') },
+      { label: 'CSE 303: Theory of Computation', href: cseCourseUrl('303') },
+      { label: 'CSE 316: Software Development', href: cseCourseUrl('316') },
+      { label: 'CSE 320: Systems Fundamentals II', href: cseCourseUrl('320') },
+      { label: 'CSE 351: Introduction to Data Science', href: cseCourseUrl('351') },
+      { label: 'CSE 353: Machine Learning', href: cseCourseUrl('353') },
+      { label: 'CSE 371: Logic', href: cseCourseUrl('371') },
+      { label: 'CSE 373: Analysis of Algorithms', href: cseCourseUrl('373') },
+      { label: 'CSE 416: Software Engineering', href: cseCourseUrl('416') },
+      { label: 'CSE 312: Legal Issues in Computing', href: cseCourseUrl('312') },
+      { label: 'CSE 300: Technical Communications', href: cseCourseUrl('300') },
+    ],
+  },
+  {
+    title: 'Applied Mathematics & Statistics',
+    courses: [
+      { label: 'AMS 210: Applied Linear Algebra', href: amsCourseUrl('210') },
+      { label: 'AMS 261: Applied Calculus III', href: amsCourseUrl('261') },
+      { label: 'AMS 301: Finite Mathematical Structures', href: amsCourseUrl('301') },
+      { label: 'AMS 310: Survey of Probability and Statistics', href: amsCourseUrl('310') },
+      { label: 'AMS 311: Probability Theory', href: amsCourseUrl('311') },
+      { label: 'AMS 315: Data Analysis', href: amsCourseUrl('315') },
+      { label: 'AP Credit: Calculus I and Calculus II' },
+    ],
+  },
 ];
 
 const PROJECTS = [
@@ -608,39 +619,49 @@ function Portfolio() {
           <SectionHeader title="Education" />
 
           <FadeIn delay={0.05}>
-            <div className="card">
+            <div className="card education-card">
               <div className="card-header">
                 <LogoLockup
                   assetName="stony-brook-logo.svg"
                   assetAlt="Stony Brook University"
+                  logoBadgeClassName="logo-badge-square logo-badge-stony-brook"
                   title="Stony Brook University"
                   subtitle="B.S. Computer Science · B.S. Applied Mathematics and Statistics"
                 />
                 <span className="card-date">Aug 2023 – May 2027</span>
               </div>
-              <div className="card-content copy-stack">
+              <div className="card-content copy-stack education-card-content">
                 <p>
                   <strong>GPA:</strong> 3.74/4.0
                 </p>
                 <p>
                   <strong>Coursework:</strong>
                 </p>
-                <div className="coursework-list">
-                  {COURSEWORK.map((course) =>
-                    course.href ? (
-                      <a
-                        key={course.label}
-                        href={course.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="coursework-link"
-                      >
-                        {course.label}
-                      </a>
-                    ) : (
-                      <span key={course.label}>{course.label}</span>
-                    ),
-                  )}
+                <div className="coursework-grid">
+                  {COURSEWORK_GROUPS.map((group) => (
+                    <div className="coursework-column" key={group.title}>
+                      <h4 className="coursework-heading">{group.title}</h4>
+                      <div className="coursework-list">
+                        {group.courses.map((course) =>
+                          course.href ? (
+                            <a
+                              key={course.label}
+                              href={course.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="coursework-link"
+                            >
+                              {course.label}
+                            </a>
+                          ) : (
+                            <span key={course.label} className="coursework-item">
+                              {course.label}
+                            </span>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
                 <p>Member of the Algorithms and Computational Geometry groups.</p>
               </div>
