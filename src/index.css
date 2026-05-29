@@ -59,6 +59,133 @@ a {
   color: white;
 }
 
+.fade-in {
+  opacity: 0;
+  transform: translateY(12px);
+  transition-property: opacity, transform;
+  transition-duration: 0.5s;
+  transition-timing-function: ease;
+}
+
+.fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-000 {
+  transition-delay: 0s;
+}
+
+.delay-002 {
+  transition-delay: 0.02s;
+}
+
+.delay-005 {
+  transition-delay: 0.05s;
+}
+
+.delay-008 {
+  transition-delay: 0.08s;
+}
+
+.delay-010 {
+  transition-delay: 0.1s;
+}
+
+.delay-013 {
+  transition-delay: 0.13s;
+}
+
+.delay-015 {
+  transition-delay: 0.15s;
+}
+
+.delay-020 {
+  transition-delay: 0.2s;
+}
+
+.delay-023 {
+  transition-delay: 0.23s;
+}
+
+.delay-024 {
+  transition-delay: 0.24s;
+}
+
+.delay-025 {
+  transition-delay: 0.25s;
+}
+
+.delay-030 {
+  transition-delay: 0.3s;
+}
+
+.delay-031 {
+  transition-delay: 0.31s;
+}
+
+.delay-032 {
+  transition-delay: 0.32s;
+}
+
+.delay-035 {
+  transition-delay: 0.35s;
+}
+
+.delay-039 {
+  transition-delay: 0.39s;
+}
+
+.delay-040 {
+  transition-delay: 0.4s;
+}
+
+.delay-045 {
+  transition-delay: 0.45s;
+}
+
+.delay-047 {
+  transition-delay: 0.47s;
+}
+
+.delay-050 {
+  transition-delay: 0.5s;
+}
+
+.delay-055 {
+  transition-delay: 0.55s;
+}
+
+.delay-060 {
+  transition-delay: 0.6s;
+}
+
+.blur-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(8px);
+  transition-property: opacity, filter, transform;
+  transition-duration: 0.6s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  margin-right: 0.3em;
+}
+
+.blur-text-visible .blur-word {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.magnet,
+.click-spark-container {
+  display: inline-block;
+}
+
+.click-spark-container {
+  position: relative;
+}
+
 /* Layout */
 .app {
   display: flex;
@@ -233,9 +360,9 @@ section:last-of-type {
 }
 
 .section-title {
-  font-size: 0.6875rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: 0;
@@ -345,13 +472,13 @@ section:last-of-type {
 .logo-badge-square {
   border: none;
   background: transparent;
-  flex: 0 0 50px;
-  width: 50px;
-  min-width: 50px;
-  max-width: 50px;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
+  flex: 0 0 58px;
+  width: 58px;
+  min-width: 58px;
+  max-width: 58px;
+  height: 58px;
+  min-height: 58px;
+  max-height: 58px;
   padding: 0;
   overflow: hidden;
 }
@@ -381,40 +508,46 @@ section:last-of-type {
   transform: scale(1.12);
 }
 
+.experience-card,
 .education-card {
   padding: 1.75rem 0;
 }
 
+.experience-card .card-header,
 .education-card .card-header {
   align-items: center;
   margin-bottom: 1rem;
 }
 
+.experience-card .identity-block,
 .education-card .identity-block {
   gap: 0.9rem;
 }
 
+.experience-card .card-title,
 .education-card .card-title {
   font-size: 1.12rem;
 }
 
+.experience-card .card-subtitle,
 .education-card .card-subtitle {
   font-size: 0.9rem;
 }
 
+.experience-card .card-date,
 .education-card .card-date {
   font-size: 0.78rem;
 }
 
 .education-card .logo-badge-stony-brook {
-  flex-basis: 56px;
-  width: 56px;
-  min-width: 56px;
-  max-width: 56px;
-  height: 56px;
-  min-height: 56px;
-  max-height: 56px;
-  padding: 4px;
+  flex-basis: 58px;
+  width: 58px;
+  min-width: 58px;
+  max-width: 58px;
+  height: 58px;
+  min-height: 58px;
+  max-height: 58px;
+  padding: 3px;
 }
 
 .education-card .logo-badge-stony-brook img {
@@ -514,6 +647,73 @@ section:last-of-type {
 
 .copy-link:hover {
   color: var(--text);
+}
+
+/* Document pages */
+.document-main {
+  padding-top: 4rem;
+  margin-left: 0;
+  max-width: 100%;
+}
+
+.document-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.document-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.document-updated {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.document-page .card-content h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.document-page .card-content h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.document-page .card-content .document-heading-offset,
+.document-page .card-content .document-subheading-offset {
+  margin-top: 1.5rem;
+}
+
+.document-page .card-content p {
+  margin-bottom: 1rem;
+}
+
+.document-page .card-content ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.document-button-top {
+  margin-top: 1rem;
+}
+
+.document-button-bottom {
+  margin-bottom: 1rem;
+}
+
+.document-page .card-content .document-back-row {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.document-link {
+  color: var(--accent);
 }
 
 /* Projects */
@@ -832,6 +1032,14 @@ section:last-of-type {
   pointer-events: none;
   clip-path: circle(0px at var(--reveal-cx) var(--reveal-cy));
   transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-reveal-light {
+  background: #fafafa;
+}
+
+.theme-reveal-dark {
+  background: #0a0a0a;
 }
 
 .theme-reveal-overlay.expanding {

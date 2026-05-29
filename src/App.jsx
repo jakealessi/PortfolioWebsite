@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import PrivacyPolicy from './PrivacyPolicy';
 import Support from './Support';
 import { FadeIn, LightbulbToggle } from './components';
+import { insertDynamicRule } from './dynamicStyles';
 import { useThemePreference } from './theme';
 
 const NAV_SECTIONS = [
@@ -14,6 +15,8 @@ const NAV_SECTIONS = [
 ];
 
 const SECTION_IDS = NAV_SECTIONS.map(({ id }) => id);
+
+const delayClassFor = (delay) => `delay-${Math.round(delay * 100).toString().padStart(3, '0')}`;
 
 const SOCIAL_LINKS = [
   {
@@ -240,18 +243,11 @@ function BlurText({ text, delay = 0, className = '' }) {
   }, []);
 
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={[className, isVisible ? 'blur-text-visible' : ''].filter(Boolean).join(' ')}>
       {text.split(' ').map((word, index) => (
         <span
           key={`${word}-${index}`}
-          style={{
-            display: 'inline-block',
-            opacity: isVisible ? 1 : 0,
-            filter: isVisible ? 'blur(0px)' : 'blur(8px)',
-            transform: isVisible ? 'translateY(0)' : 'translateY(8px)',
-            transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${delay + index * 0.08}s`,
-            marginRight: '0.3em',
-          }}
+          className={['blur-word', delayClassFor(delay + index * 0.08)].join(' ')}
         >
           {word}
         </span>
@@ -262,7 +258,23 @@ function BlurText({ text, delay = 0, className = '' }) {
 
 function Magnet({ children, strength = 0.15 }) {
   const ref = useRef(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const animationRef = useRef(null);
+
+  const moveTo = (x, y, duration) => {
+    if (!ref.current) {
+      return;
+    }
+
+    const fromTransform = getComputedStyle(ref.current).transform;
+    animationRef.current?.cancel();
+    animationRef.current = ref.current.animate(
+      [
+        { transform: fromTransform === 'none' ? 'translate(0px, 0px)' : fromTransform },
+        { transform: `translate(${x}px, ${y}px)` },
+      ],
+      { duration, easing: 'ease', fill: 'forwards' }
+    );
+  };
 
   const handleMouseMove = (event) => {
     if (!ref.current) {
@@ -273,19 +285,15 @@ function Magnet({ children, strength = 0.15 }) {
     const x = (event.clientX - rect.left - rect.width / 2) * strength;
     const y = (event.clientY - rect.top - rect.height / 2) * strength;
 
-    setPos({ x, y });
+    moveTo(x, y, 100);
   };
 
   return (
     <span
       ref={ref}
+      className="magnet"
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => setPos({ x: 0, y: 0 })}
-      style={{
-        display: 'inline-block',
-        transform: `translate(${pos.x}px, ${pos.y}px)`,
-        transition: pos.x === 0 ? 'transform 0.4s ease' : 'transform 0.1s ease',
-      }}
+      onMouseLeave={() => moveTo(0, 0, 400)}
     >
       {children}
     </span>
@@ -296,6 +304,7 @@ function ClickSpark({ children, sparkColor = '#3b82f6', sparkCount = 6 }) {
   const [sparks, setSparks] = useState([]);
   const containerRef = useRef(null);
   const timeoutIdsRef = useRef([]);
+  const sparkCounterRef = useRef(0);
 
   useEffect(() => {
     return () => {
@@ -321,13 +330,18 @@ function ClickSpark({ children, sparkColor = '#3b82f6', sparkCount = 6 }) {
       const angle = (360 / sparkCount) * index;
       const velocity = 30 + Math.random() * 30;
       const radians = (angle * Math.PI) / 180;
+      const sparkClassName = `click-spark-${Date.now()}-${sparkCounterRef.current}`;
+
+      sparkCounterRef.current += 1;
+      insertDynamicRule(
+        `.${sparkClassName}{left:${x}px;top:${y}px;background:${sparkColor};box-shadow:0 0 6px ${sparkColor};--spark-x:${
+          Math.cos(radians) * velocity
+        }px;--spark-y:${Math.sin(radians) * velocity}px;}`
+      );
 
       return {
         id: `${Date.now()}-${index}`,
-        x,
-        y,
-        offsetX: `${Math.cos(radians) * velocity}px`,
-        offsetY: `${Math.sin(radians) * velocity}px`,
+        sparkClassName,
       };
     });
 
@@ -345,21 +359,13 @@ function ClickSpark({ children, sparkColor = '#3b82f6', sparkCount = 6 }) {
     <span
       ref={containerRef}
       onClick={createSpark}
-      style={{ position: 'relative', display: 'inline-block' }}
+      className="click-spark-container"
     >
       {children}
       {sparks.map((spark) => (
         <span
           key={spark.id}
-          className="click-spark"
-          style={{
-            left: spark.x,
-            top: spark.y,
-            background: sparkColor,
-            boxShadow: `0 0 6px ${sparkColor}`,
-            '--spark-x': spark.offsetX,
-            '--spark-y': spark.offsetY,
-          }}
+          className={['click-spark', spark.sparkClassName].join(' ')}
         />
       ))}
     </span>
@@ -591,7 +597,7 @@ function Portfolio() {
 
           {EXPERIENCE_ITEMS.map((experience, index) => (
             <FadeIn key={experience.title} delay={0.05 * (index + 1)}>
-              <div className="card">
+              <div className="card experience-card">
                 <div className="card-header">
                   <LogoLockup
                     assetName={experience.assetName}
@@ -670,6 +676,8 @@ function Portfolio() {
         </section>
 
         <section id="projects">
+          <SectionHeader title="Projects" />
+
           {PROJECTS.map((project, index) => (
             <ProjectCard key={project.title} project={project} delay={0.05 * (index + 1)} />
           ))}

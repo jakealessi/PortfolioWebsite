@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { insertDynamicRule } from './dynamicStyles';
+
+const delayClassFor = (delay) => `delay-${Math.round(delay * 100).toString().padStart(3, '0')}`;
 
 // Simple fade in on scroll
 export function FadeIn({ children, delay = 0 }) {
@@ -27,11 +30,7 @@ export function FadeIn({ children, delay = 0 }) {
   return (
     <div
       ref={ref}
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(12px)',
-        transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`,
-      }}
+      className={['fade-in', delayClassFor(delay), isVisible ? 'is-visible' : ''].filter(Boolean).join(' ')}
     >
       {children}
     </div>
@@ -94,11 +93,13 @@ export function LightbulbToggle({ isDark, onToggle }) {
 
     overlayRef.current?.remove();
     const overlay = document.createElement('div');
-    overlay.className = 'theme-reveal-overlay';
-    overlay.style.setProperty('--reveal-cx', `${cx}px`);
-    overlay.style.setProperty('--reveal-cy', `${cy}px`);
-    overlay.style.setProperty('--reveal-radius', `${maxDist}px`);
-    overlay.style.background = turningOn ? '#fafafa' : '#0a0a0a';
+    const revealClass = `theme-reveal-${Date.now()}`;
+    insertDynamicRule(
+      `.${revealClass}{--reveal-cx:${cx}px;--reveal-cy:${cy}px;--reveal-radius:${maxDist}px;}`
+    );
+    overlay.className = ['theme-reveal-overlay', revealClass, turningOn ? 'theme-reveal-light' : 'theme-reveal-dark']
+      .filter(Boolean)
+      .join(' ');
     document.body.appendChild(overlay);
     overlayRef.current = overlay;
 
