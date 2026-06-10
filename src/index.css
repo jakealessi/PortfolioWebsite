@@ -519,6 +519,10 @@ section:last-of-type {
   margin-bottom: 1rem;
 }
 
+.experience-card .card-header {
+  column-gap: clamp(1rem, 3vw, 2rem);
+}
+
 .experience-card .identity-block,
 .education-card .identity-block {
   gap: 0.9rem;
@@ -873,6 +877,26 @@ section:last-of-type {
   .main {
     padding: 0 2rem;
   }
+
+  section {
+    padding: 2.25rem 0;
+  }
+
+  #experience .section-header,
+  #education .section-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .experience-card,
+  .education-card {
+    padding: 1rem 0;
+  }
+
+  .experience-card .card-header,
+  .education-card .card-header {
+    justify-content: flex-start;
+    margin-bottom: 0.8rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -919,17 +943,25 @@ section:last-of-type {
     min-height: calc(100vh - 60px);
   }
   
-  section {
-    padding: 4rem 0;
-  }
-  
   .card-header {
     flex-direction: column;
     gap: 0.25rem;
   }
 
+  .experience-card .card-header,
   .education-card .card-header {
-    gap: 0.55rem;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .experience-card .card-date,
+  .education-card .card-date {
+    margin-left: calc(58px + 0.9rem);
+  }
+
+  .education-card .card-header {
+    gap: 0.45rem;
   }
 
   .education-card .card-title {

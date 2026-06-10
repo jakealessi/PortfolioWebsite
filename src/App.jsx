@@ -128,18 +128,19 @@ const PROJECTS = [
   },
   {
     title: 'FreebieBot',
-    tech: ['Node.js', 'SQLite', 'REST APIs', 'Web Scraping', 'Concurrency'],
+    tech: ['Node.js', 'PostgreSQL', 'Discord.js', 'REST APIs', 'Web Scraping', 'Concurrency'],
     description: (
       <>
-        Built a Discord bot that scans Shopify storefronts for free products matching user keywords and
-        returns both the product page and a prefilled cart checkout link. Designed the scraper around public{' '}
+        Built a Discord bot and local catalog UI that scan Shopify storefronts for free products and return
+        both product pages and adjustable prefilled cart checkout links. Designed the scraper around public{' '}
         <code>products.json</code> feeds with paginated ingestion, availability checks, junk filtering, and{' '}
-        <code>cart.js</code> validation to confirm cart currency and pricing. Added SQLite backed background
-        jobs with resumable page leases and a BFS style round robin scheduler, allowing scans to rotate across
-        many storefronts instead of overloading one domain. Implemented storefront warmups, retry and backoff
-        handling, and automated host exclusions to keep large scans moving through blocked or rate limited
-        feeds. In real use, the bot has surfaced over $5,000 MSRP in free products that were checked out and
-        delivered.
+        <code>cart.js</code> validation to confirm cart currency and pricing. Reworked the backend around
+        PostgreSQL with versioned site lists, shared host exclusions, searchable catalog rows, metrics tables,
+        and resumable full-catalog refresh jobs. Added page-level task leases and a spaced round robin scheduler,
+        allowing scans to rotate across many storefronts instead of overloading one domain. Each refresh records
+        raw free-variant observations, applies quality rules, and derives the indexed catalog used by Discord
+        search and the frontend. In real use, the claim-link workflow has been used to check out over $10,000
+        worth of free items.
       </>
     ),
   },
