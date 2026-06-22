@@ -139,8 +139,8 @@ const PROJECTS = [
         and resumable full-catalog refresh jobs. Added page-level task leases and a spaced round robin scheduler,
         allowing scans to rotate across many storefronts instead of overloading one domain. Each refresh records
         raw free-variant observations, applies quality rules, and derives the indexed catalog used by Discord
-        search and the frontend. In real use, the claim-link workflow has been used to check out over $10,000
-        worth of free items.
+        search and the frontend. In real use, the claim-link workflow has been used to check out over{' '}
+        <strong>$25,000</strong> worth of free items.
       </>
     ),
   },
