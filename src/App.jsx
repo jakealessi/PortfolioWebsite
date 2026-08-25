@@ -128,7 +128,7 @@ const EXPERIENCE_ITEMS = [
 ];
 
 const cseCourseUrl = (courseNumber) =>
-  `https://www.cs.stonybrook.edu/students/undergraduate-studies/courses/cse${courseNumber}`;
+  `https://www3.cs.stonybrook.edu/~cse${courseNumber}/`;
 
 const amsCourseUrl = (courseNumber) =>
   `https://www.stonybrook.edu/ams/academics/undergraduate/ug-courses/ams-${courseNumber}.html`;
@@ -188,18 +188,19 @@ const PROJECTS = [
   },
   {
     title: 'FreebieBot',
-    tech: ['Node.js', 'PostgreSQL', 'Discord.js', 'REST APIs', 'Web Scraping', 'Concurrency'],
+    tech: ['Node.js', 'PostgreSQL', 'REST APIs', 'Web Scraping', 'Concurrency'],
     description: (
       <>
-        Built a Discord bot and local catalog UI that scan Shopify storefronts for free products and return
-        both product pages and adjustable prefilled cart checkout links. Designed the scraper around public{' '}
+        Built a standalone free-product discovery platform that scans Shopify storefronts and exposes results
+        through a searchable web catalog and REST API, returning both product pages and adjustable prefilled cart
+        checkout links. Designed the scraper around public{' '}
         <code>products.json</code> feeds with paginated ingestion, availability checks, junk filtering, and{' '}
         <code>cart.js</code> validation to confirm cart currency and pricing. Reworked the backend around
         PostgreSQL with versioned site lists, shared host exclusions, searchable catalog rows, metrics tables,
         and resumable full-catalog refresh jobs. Added page-level task leases and a spaced round robin scheduler,
         allowing scans to rotate across many storefronts instead of overloading one domain. Each refresh records
-        raw free-variant observations, applies quality rules, and derives the indexed catalog used by Discord
-        search and the frontend. In real use, the claim-link workflow has been used to check out over{' '}
+        raw free-variant observations, applies quality rules, and derives the indexed catalog consumed directly
+        by the standalone web interface. In real use, the claim-link workflow has been used to check out over{' '}
         <strong>$25,000</strong> worth of free items.
       </>
     ),
