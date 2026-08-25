@@ -52,8 +52,50 @@ const EXPERIENCE_ITEMS = [
     subtitleUrl: 'https://www.curbwaste.com',
     date: 'Jun 2026 – Aug 2026',
     bullets: [
-      'Software Engineer Intern at CurbWaste, a Series B software startup building an operating system for independent waste haulers.',
-      'Contributing to software that helps modernize dispatching, routing, billing, customer management, and day-to-day operations across the waste industry.',
+      <>
+        Built a multi-provider GPS integration using{' '}
+        <a href="https://www.withterminal.com" target="_blank" rel="noopener noreferrer" className="copy-link">
+          Terminal
+        </a>
+        &apos;s unified telematics API, enabling waste haulers to connect their existing fleet-tracking
+        provider, see live truck locations on CurbWaste&apos;s Dispatch map, and retain location history for
+        analytics.
+      </>,
+      'Engineered the backend foundation, including the database schema and migrations, provider API integration, encrypted credential storage, webhook handlers, and vehicle-to-truck matching engine.',
+      'Prevented GPS overbilling by polling only vehicles matched to active trucks, keeping new and unmatched connections in manual sync with a zero-vehicle filter, validating provider filters before location requests, revoking rejected connections upstream, and ensuring disconnect, reconnect, retry, and failure paths could not leave duplicate or orphaned connections accruing charges.',
+      'Created the settings workflow for connecting provider accounts and reviewing vehicle matches, along with the live truck layer used on the Dispatch map.',
+      'Improved the backend CI pipeline after end-to-end test runners repeatedly ran out of memory by recycling workers and splitting test shards into smaller batches, making test runs more reliable.',
+    ],
+    tech: [
+      'TypeScript',
+      'React',
+      'RTK Query',
+      'NestJS',
+      'Prisma',
+      'PostgreSQL',
+      'Redis',
+      'BullMQ',
+      'Jest',
+      'Storybook',
+      'LaunchDarkly',
+      'GitHub Actions',
+    ],
+    gallery: [
+      {
+        assetName: 'curbwaste-gps-settings.jpg',
+        alt: 'CurbWaste GPS connection and vehicle matching settings',
+        caption: 'GPS connection management',
+      },
+      {
+        assetName: 'curbwaste-vehicle-matching.jpg',
+        alt: 'CurbWaste manual vehicle-to-truck matching dialog',
+        caption: 'Vehicle-to-truck matching',
+      },
+      {
+        assetName: 'curbwaste-dispatch-map.jpg',
+        alt: 'CurbWaste Dispatch map displaying live truck locations',
+        caption: 'Live locations in Dispatch',
+      },
     ],
   },
   {
@@ -69,6 +111,18 @@ const EXPERIENCE_ITEMS = [
       'Deployed and hardened PCs, servers, and network equipment for business clients, ensuring secure and dependable setups aligned with best practices.',
       'Supported Azure and Microsoft 365 administration, including provisioning, access policies, and issue resolution across client tenants.',
       'Worked with senior IT staff to troubleshoot escalated issues and implement fixes that balanced security, usability, and client requirements.',
+    ],
+    tech: [
+      'PowerShell',
+      'Bash',
+      'Microsoft Azure',
+      'Microsoft 365',
+      'Windows',
+      'Networking',
+      'System Administration',
+      'Cloud Infrastructure',
+      'Security Hardening',
+      'Identity & Access Management',
     ],
   },
 ];
@@ -88,16 +142,18 @@ const COURSEWORK_GROUPS = [
       { label: 'CSE 215: Foundations of Computer Science', href: cseCourseUrl('215') },
       { label: 'CSE 216: Programming Abstractions', href: cseCourseUrl('216') },
       { label: 'CSE 220: Systems Fundamentals I', href: cseCourseUrl('220') },
+      { label: 'CSE 300: Technical Communications', href: cseCourseUrl('300') },
       { label: 'CSE 303: Theory of Computation', href: cseCourseUrl('303') },
+      { label: 'CSE 310: Computer Networks', href: cseCourseUrl('310') },
+      { label: 'CSE 312: Legal Issues in Computing', href: cseCourseUrl('312') },
       { label: 'CSE 316: Software Development', href: cseCourseUrl('316') },
       { label: 'CSE 320: Systems Fundamentals II', href: cseCourseUrl('320') },
       { label: 'CSE 351: Introduction to Data Science', href: cseCourseUrl('351') },
       { label: 'CSE 353: Machine Learning', href: cseCourseUrl('353') },
+      { label: 'CSE 355: Computational Geometry', href: cseCourseUrl('355') },
       { label: 'CSE 371: Logic', href: cseCourseUrl('371') },
       { label: 'CSE 373: Analysis of Algorithms', href: cseCourseUrl('373') },
       { label: 'CSE 416: Software Engineering', href: cseCourseUrl('416') },
-      { label: 'CSE 312: Legal Issues in Computing', href: cseCourseUrl('312') },
-      { label: 'CSE 300: Technical Communications', href: cseCourseUrl('300') },
     ],
   },
   {
@@ -106,9 +162,12 @@ const COURSEWORK_GROUPS = [
       { label: 'AMS 210: Applied Linear Algebra', href: amsCourseUrl('210') },
       { label: 'AMS 261: Applied Calculus III', href: amsCourseUrl('261') },
       { label: 'AMS 301: Finite Mathematical Structures', href: amsCourseUrl('301') },
+      { label: 'AMS 303: Graph Theory', href: amsCourseUrl('303') },
       { label: 'AMS 310: Survey of Probability and Statistics', href: amsCourseUrl('310') },
       { label: 'AMS 311: Probability Theory', href: amsCourseUrl('311') },
       { label: 'AMS 315: Data Analysis', href: amsCourseUrl('315') },
+      { label: 'AMS 318: Financial Mathematics', href: amsCourseUrl('318') },
+      { label: 'AMS 345: Computational Geometry', href: amsCourseUrl('345') },
       { label: 'AP Credit: Calculus I and Calculus II' },
     ],
   },
@@ -427,6 +486,45 @@ function ProjectStatusFlag({ label, note }) {
   );
 }
 
+function TechnologyTags({ technologies }) {
+  return (
+    <div className="tech-tags" aria-label="Technologies used">
+      {technologies.map((technology) => (
+        <span key={technology} className="tech-tag">
+          {technology}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ExperienceGallery({ images }) {
+  return (
+    <div className="experience-gallery">
+      <p className="experience-gallery-label">Internship highlights</p>
+      <div className="experience-gallery-grid">
+        {images.map((galleryImage) => {
+          const imageUrl = `${import.meta.env.BASE_URL}${galleryImage.assetName}`;
+
+          return (
+            <a
+              key={galleryImage.assetName}
+              href={imageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="experience-gallery-item"
+              aria-label={`Open full-size image: ${galleryImage.caption}`}
+            >
+              <img src={imageUrl} alt={galleryImage.alt} loading="lazy" />
+              <span>{galleryImage.caption}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function ProjectCard({ project, delay }) {
   return (
     <FadeIn delay={delay}>
@@ -441,13 +539,7 @@ function ProjectCard({ project, delay }) {
         </div>
         <div className="card-content copy-stack">
           <p>{project.description}</p>
-          <div className="project-tech">
-            {project.tech.map((tag) => (
-              <span key={tag} className="tech-tag">
-                {tag}
-              </span>
-            ))}
-          </div>
+          <TechnologyTags technologies={project.tech} />
           {project.liveUrl || project.githubUrl ? (
             <div className="project-links">
               {project.liveUrl ? (
@@ -613,10 +705,12 @@ function Portfolio() {
                 </div>
                 <div className="card-content">
                   <ul>
-                    {experience.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
+                    {experience.bullets.map((bullet, bulletIndex) => (
+                      <li key={`${experience.title}-${bulletIndex}`}>{bullet}</li>
                     ))}
                   </ul>
+                  <TechnologyTags technologies={experience.tech} />
+                  {experience.gallery ? <ExperienceGallery images={experience.gallery} /> : null}
                 </div>
               </div>
             </FadeIn>

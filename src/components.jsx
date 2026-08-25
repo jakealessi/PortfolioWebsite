@@ -163,11 +163,13 @@ export function LightbulbToggle({ isDark, onToggle }) {
         <path d="M 26 28 C 25 40, 23 50, 30 63" stroke={filamentColor} strokeWidth="2" strokeLinecap="round" fill="none"/>
         <path d="M 34 28 C 35 40, 37 50, 30 63" stroke={filamentColor} strokeWidth="2" strokeLinecap="round" fill="none"/>
       </svg>
-      <div className={`ball-chain ${isPulling ? 'pulling' : ''}`}>
-        {[...Array(10)].map((_, i) => (
-          <div key={i} className="chain-ball" />
-        ))}
-        <div className="chain-pull" />
+      <div className="ball-chain-motion">
+        <div className={`ball-chain ${isPulling ? 'pulling' : ''}`}>
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className="chain-ball" />
+          ))}
+          <div className="chain-pull" />
+        </div>
       </div>
     </button>
   );
