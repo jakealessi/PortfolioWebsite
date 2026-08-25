@@ -82,17 +82,17 @@ const EXPERIENCE_ITEMS = [
     ],
     gallery: [
       {
-        assetName: 'curbwaste-gps-settings.jpg',
+        assetName: 'curbwaste-gps-settings.png',
         alt: 'CurbWaste GPS connection and vehicle matching settings',
         caption: 'GPS connection management',
       },
       {
-        assetName: 'curbwaste-vehicle-matching.jpg',
+        assetName: 'curbwaste-vehicle-matching.png',
         alt: 'CurbWaste manual vehicle-to-truck matching dialog',
         caption: 'Vehicle-to-truck matching',
       },
       {
-        assetName: 'curbwaste-dispatch-map.jpg',
+        assetName: 'curbwaste-dispatch-map.png',
         alt: 'CurbWaste Dispatch map displaying live truck locations',
         caption: 'Live locations in Dispatch',
       },
