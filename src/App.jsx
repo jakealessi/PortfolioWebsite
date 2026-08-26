@@ -55,9 +55,9 @@ const EXPERIENCE_ITEMS = [
       <>
         Built a multi-provider GPS integration using{' '}
         <a href="https://www.withterminal.com" target="_blank" rel="noopener noreferrer" className="copy-link">
-          Terminal
+          Terminal&apos;s
         </a>
-        &apos;s unified telematics API, enabling waste haulers to connect their existing fleet-tracking
+        {' '}unified telematics API, enabling waste haulers to connect their existing fleet-tracking
         provider, see live truck locations on CurbWaste&apos;s Dispatch map, and retain location history for
         analytics.
       </>,
@@ -188,20 +188,29 @@ const PROJECTS = [
   },
   {
     title: 'FreebieBot',
-    tech: ['Node.js', 'PostgreSQL', 'REST APIs', 'Web Scraping', 'Concurrency'],
+    tech: [
+      'JavaScript',
+      'Node.js',
+      'PostgreSQL',
+      'Docker',
+      'Cloudflare Workers',
+      'REST APIs',
+      'Web Scraping',
+      'Concurrency',
+    ],
     description: (
       <>
-        Built a standalone free-product discovery platform that scans Shopify storefronts and exposes results
-        through a searchable web catalog and REST API, returning both product pages and adjustable prefilled cart
-        checkout links. Designed the scraper around public{' '}
-        <code>products.json</code> feeds with paginated ingestion, availability checks, junk filtering, and{' '}
-        <code>cart.js</code> validation to confirm cart currency and pricing. Reworked the backend around
-        PostgreSQL with versioned site lists, shared host exclusions, searchable catalog rows, metrics tables,
-        and resumable full-catalog refresh jobs. Added page-level task leases and a spaced round robin scheduler,
-        allowing scans to rotate across many storefronts instead of overloading one domain. Each refresh records
-        raw free-variant observations, applies quality rules, and derives the indexed catalog consumed directly
-        by the standalone web interface. In real use, the claim-link workflow has been used to check out over{' '}
-        <strong>$25,000</strong> worth of free items.
+        Built a free-product discovery platform that scans Shopify stores and makes the results available through
+        a searchable community website and REST API, with links to product pages and adjustable prefilled carts.
+        The scraper reads public <code>products.json</code> feeds, works through paginated catalogs, checks
+        availability, filters out junk listings, and uses <code>cart.js</code> to confirm currency and pricing.
+        Visitors can scan stores on demand, vote on results, and leave comments; accepted finds go through the
+        same quality checks and publishing flow as full refreshes. The PostgreSQL backend keeps versioned store
+        lists, shared exclusions, searchable catalog data, and scan metrics. Large refreshes save their progress
+        and rotate between stores, so interrupted scans can resume without repeatedly hitting the same site. As
+        they run, they record every free item found, apply quality rules, and publish accepted results to the web
+        catalog. In real use, the claim-link workflow has been used to check out over <strong>$30,000</strong> worth
+        of free items.
       </>
     ),
   },
@@ -735,7 +744,7 @@ function Portfolio() {
               </div>
               <div className="card-content copy-stack education-card-content">
                 <p>
-                  <strong>GPA:</strong> 3.74/4.0
+                  <strong>GPA:</strong> 3.75/4.0
                 </p>
                 <p>
                   <strong>Coursework:</strong>
