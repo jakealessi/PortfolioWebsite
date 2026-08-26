@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { insertDynamicRule } from './dynamicStyles';
 
 const delayClassFor = (delay) => `delay-${Math.round(delay * 100).toString().padStart(3, '0')}`;
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 // Simple fade in on scroll
 export function FadeIn({ children, delay = 0 }) {
@@ -75,11 +77,16 @@ export function LightbulbToggle({ isDark, onToggle }) {
       return;
     }
 
-    setIsAnimating(true);
-    setIsPulling(true);
-
     const turningOn = !bulbOn;
     setBulbOn(turningOn);
+
+    if (prefersReducedMotion()) {
+      onToggle();
+      return;
+    }
+
+    setIsAnimating(true);
+    setIsPulling(true);
 
     const bulbEl = bulbRef.current;
     const rect = bulbEl.getBoundingClientRect();

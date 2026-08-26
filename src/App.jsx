@@ -18,6 +18,8 @@ const NAV_SECTIONS = [
 const SECTION_IDS = NAV_SECTIONS.map(({ id }) => id);
 
 const delayClassFor = (delay) => `delay-${Math.round(delay * 100).toString().padStart(3, '0')}`;
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 const SOCIAL_LINKS = [
   {
@@ -336,6 +338,11 @@ function Magnet({ children, strength = 0.15 }) {
       return;
     }
 
+    if (prefersReducedMotion()) {
+      animationRef.current?.cancel();
+      return;
+    }
+
     const fromTransform = getComputedStyle(ref.current).transform;
     animationRef.current?.cancel();
     animationRef.current = ref.current.animate(
@@ -385,7 +392,7 @@ function ClickSpark({ children, sparkColor = '#3b82f6', sparkCount = 6 }) {
   }, []);
 
   const createSpark = (event) => {
-    if (!containerRef.current) {
+    if (!containerRef.current || prefersReducedMotion()) {
       return;
     }
 
@@ -487,7 +494,7 @@ function ProjectStatusFlag({ label, note }) {
         {label}
       </button>
       <span className="status-hint" aria-hidden="true">
-        Hover for details
+        View details
       </span>
       <span id={tooltipId} role="tooltip" className="status-tooltip">
         {note}
