@@ -5,7 +5,6 @@ import './polymarket.css';
 
 const FEED = import.meta.env.VITE_POLYMARKET_FEED_URL
   || 'https://polymarket-paper-feed.jake-alessi.chatgpt.site/v1/snapshot';
-const PREVIEW = import.meta.env.DEV && FEED.startsWith('/');
 const POLL_MS = 5000;
 const STALE_AFTER = 25;
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
@@ -277,7 +276,7 @@ function TradeActivity({ trades }) {
           <table aria-label="Recent paper trading activity">
             <thead><tr>
               <th scope="col">Market window</th><th scope="col">Side</th><th scope="col">Shares</th>
-              <th scope="col">Entry</th><th scope="col">Exit</th><th scope="col">Status</th><th scope="col">P&amp;L</th>
+              <th scope="col">Entry</th><th scope="col">Exit / payout</th><th scope="col">Status</th><th scope="col">P&amp;L</th>
             </tr></thead>
             <tbody>{visible.map((trade) => (
               <tr key={trade.slug}>
@@ -285,8 +284,17 @@ function TradeActivity({ trades }) {
                   target="_blank" rel="noreferrer">{dateTime(trade.start)} <span aria-hidden="true">↗</span></a></td>
                 <td className={trade.side === 'Up' ? 'positive' : 'negative'}>{trade.side}</td>
                 <td>{trade.shares}</td><td>{cents(trade.entry)}</td>
-                <td>{trade.state === 'settled' ? cents(trade.settlement) : cents(trade.exit)}</td>
-                <td><span className="pm-trade-state">{tradeLabels[trade.state]}</span></td>
+                <td>
+                  {trade.state === 'settled' ? <>{cents(trade.settlement)} <small>payout</small></>
+                    : trade.state === 'sold' ? <>{cents(trade.exit)} <small>sale</small></>
+                      : trade.state === 'ask' ? <>{cents(trade.exit)} <small>ask</small></> : '—'}
+                </td>
+                <td>
+                  <span className="pm-trade-state">{tradeLabels[trade.state]}</span>
+                  {trade.state === 'settled' && trade.exit != null && (
+                    <small className="pm-unfilled">{cents(trade.exit)} sell unfilled</small>
+                  )}
+                </td>
                 <td className={tone(trade.pnl)}>{trade.pnl == null ? '—' : signedMoney.format(trade.pnl)}</td>
               </tr>
             ))}</tbody>
@@ -315,7 +323,8 @@ export default function Polymarket() {
 
   const fresh = snapshot && state === 'received' && now - snapshot.publishedAt <= STALE_AFTER;
   const statuses = { running: 'Bot running', waiting: 'Waiting for market', degraded: 'Market feed delayed', stopped: 'Bot stopped' };
-  const status = PREVIEW ? 'Sample data' : state === 'loading' ? 'Connecting'
+  const sample = import.meta.env.DEV && snapshot?.sample === true;
+  const status = sample ? 'Sample data' : state === 'loading' ? 'Connecting'
     : state === 'unreachable' ? 'Feed unavailable' : !snapshot ? 'Awaiting bot'
     : snapshot.status === 'stopped' ? 'Bot stopped' : !fresh ? 'Feed stale' : statuses[snapshot.status];
   const running = fresh && snapshot.status === 'running';
@@ -336,7 +345,7 @@ export default function Polymarket() {
           <p className="pm-lead">BTC Up / Down · Five-minute markets</p>
         </div>
         <div className="pm-feed-status">
-          <span className={running && !PREVIEW ? 'pm-status pm-status-live' : 'pm-status'} role="status">
+          <span className={running && !sample ? 'pm-status pm-status-live' : 'pm-status'} role="status">
             <i aria-hidden="true" />{status}
           </span>
           {snapshot && <p>Updated {updateTime.format(new Date(snapshot.publishedAt * 1000))}</p>}
@@ -369,7 +378,7 @@ export default function Polymarket() {
         <CurrentMarket market={snapshot?.market} now={now} fresh={running} />
       </div>
       <TradeActivity trades={snapshot?.trades} />
-      <p className="pm-footnote">All orders and balances are simulated. Market quotes come from Polymarket.</p>
+      <p className="pm-footnote">Paper fills require enough displayed size through the order price. Market quotes and settlement payouts come from Polymarket.</p>
     </main>
   );
 }

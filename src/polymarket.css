@@ -203,7 +203,9 @@
 .pm-activity tbody tr:last-child td { border-bottom: 0; }
 .pm-activity a:hover { text-decoration: underline; }
 .pm-activity a span { color: var(--text-secondary); }
-.pm-trade-state { color: var(--text-secondary); }
+.pm-trade-state, .pm-activity td small { color: var(--text-secondary); }
+.pm-activity td small { font-size: 0.67rem; }
+.pm-unfilled { display: block; }
 .pm-activity-empty { padding: 21px 0 13px; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 0.76rem; }
 .pm-footnote { color: var(--text-secondary); margin-top: 13px; font-size: 0.68rem; }
 
