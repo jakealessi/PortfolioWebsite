@@ -356,7 +356,7 @@ export default function Polymarket() {
       <div className="pm-rule-strip" aria-label="Strategy">
         <span>Opening bids <strong>20¢ Up / Down</strong></span>
         <span>Entry cutoff <strong>3:45 left</strong></span>
-        <span>Maker exit <strong>51¢</strong></span>
+        <span>Maker exit <strong>30¢</strong></span>
       </div>
 
       <section className="pm-metrics" aria-label="Paper trading metrics">
