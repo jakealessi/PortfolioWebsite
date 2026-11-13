@@ -35,6 +35,32 @@ const dateTime = (seconds) => date.format(new Date(seconds * 1000));
 const tone = (value) => value > 0 ? 'positive' : value < 0 ? 'negative' : '';
 const archivedPnl = archivedActivity.trades.reduce((sum, trade) => sum + trade.pnl, 0);
 const archivedSales = archivedActivity.trades.filter((trade) => trade.state === 'sold').length;
+const archivedWins = archivedActivity.trades.filter((trade) => trade.pnl > 0).length;
+const archivedTimeline = [{ time: archivedActivity.trades.at(-1).start, pnl: 0 }];
+for (const trade of [...archivedActivity.trades].sort((a, b) => a.closedAt - b.closedAt)) {
+  archivedTimeline.push({ time: trade.closedAt, pnl: archivedTimeline.at(-1).pnl + trade.pnl });
+}
+
+function strategyHistory(snapshot) {
+  const live = snapshot?.metrics;
+  const history = [
+    ...archivedTimeline,
+    ...(snapshot?.history ?? []).map(({ time, pnl }) => ({ time, pnl: archivedPnl + pnl })),
+  ];
+  const trades = new Map(archivedActivity.trades.map((trade) => [`${trade.slug}-${trade.side}`, trade]));
+  for (const trade of [...(snapshot?.closedTrades ?? []), ...(snapshot?.trades ?? [])]) {
+    trades.set(`${trade.slug}-${trade.side}`, trade);
+  }
+  return {
+    history,
+    publishedAt: Math.max(snapshot?.publishedAt ?? 0, history.at(-1).time),
+    trades: [...trades.values()].sort((a, b) => b.start - a.start),
+    realizedPnl: archivedPnl + (live?.realizedPnl ?? 0),
+    closedTrades: archivedActivity.trades.length + (live?.closedTrades ?? 0),
+    winningTrades: archivedWins + (live?.winningTrades ?? 0),
+    available: live ? archivedPnl + live.available : null,
+  };
+}
 
 function useFeed() {
   const [feed, setFeed] = useState({ snapshot: null, state: 'loading' });
@@ -87,14 +113,14 @@ function pnlPoints(history, range, publishedAt) {
   return points;
 }
 
-function PnlChart({ snapshot, isDark }) {
+function PnlChart({ strategy, isDark }) {
   const [range, setRange] = useState('all');
   const canvas = useRef(null);
   const points = useMemo(
-    () => pnlPoints(snapshot?.history ?? [], range, snapshot?.publishedAt),
-    [snapshot, range],
+    () => pnlPoints(strategy.history, range, strategy.publishedAt),
+    [strategy, range],
   );
-  const meaningful = points.length > 1 && snapshot?.metrics.closedTrades > 0;
+  const meaningful = points.length > 1;
   useEffect(() => {
     const node = canvas.current;
     if (!node || !meaningful) return;
@@ -193,8 +219,8 @@ function PnlChart({ snapshot, isDark }) {
     <section className="pm-panel pm-performance" aria-labelledby="pm-performance-title">
       <div className="pm-panel-heading">
         <div>
-          <h2 id="pm-performance-title">Realized P&amp;L</h2>
-          <p>Cumulative paper results</p>
+          <h2 id="pm-performance-title">30¢ strategy P&amp;L</h2>
+          <p>Historical estimates and recorded paper trades</p>
         </div>
         <div className="pm-tabs" aria-label="Chart period">
           {[['24h', '24H'], ['all', 'All']].map(([value, label]) => (
@@ -205,10 +231,10 @@ function PnlChart({ snapshot, isDark }) {
       </div>
       {meaningful ? (
         <canvas ref={canvas} className="pm-chart" role="img"
-          aria-label={`Realized profit and loss for ${range === '24h' ? 'the last 24 hours' : 'all time'} ends at ${signedMoney.format(points.at(-1).pnl)}.`} />
+          aria-label={`30¢ strategy profit and loss for ${range === '24h' ? 'the last 24 hours' : 'all time'} ends at ${signedMoney.format(points.at(-1).pnl)}.`} />
       ) : (
         <div className="pm-chart pm-chart-empty">
-          <p>{snapshot ? 'P&L appears after the first closed trade.' : 'Waiting for the first bot update.'}</p>
+          <p>No P&L points in this period.</p>
         </div>
       )}
     </section>
@@ -260,8 +286,7 @@ function CurrentMarket({ market, now, fresh }) {
 function TradeActivity({ trades }) {
   const [filter, setFilter] = useState('all');
   const [expanded, setExpanded] = useState(false);
-  const activity = [...(trades ?? []), ...archivedActivity.trades];
-  const visible = activity.filter((trade) => {
+  const visible = trades.filter((trade) => {
     if (filter === 'pre-reset') return Boolean(trade.source);
     if (filter === 'closed') return isClosed(trade);
     if (filter === 'open') return ['bid', 'held', 'ask', 'awaiting'].includes(trade.state);
@@ -273,7 +298,7 @@ function TradeActivity({ trades }) {
       <div className="pm-panel-heading">
         <div>
           <h2 id="pm-activity-title">Trade activity</h2>
-          <p>Current paper orders and pre-reset 30¢ results</p>
+          <p>30¢ backtest and recorded paper trades</p>
         </div>
         <div className="pm-tabs" aria-label="Filter activity">
           {[['all', 'All'], ['open', 'Open'], ['closed', 'Closed'], ['pre-reset', 'Pre-reset']].map(([value, label]) => (
@@ -300,7 +325,7 @@ function TradeActivity({ trades }) {
       </details>
       {visible.length ? (
         <div className="pm-table-scroll">
-          <table aria-label="Recent paper trading activity">
+          <table aria-label="30¢ strategy trading activity">
             <thead><tr>
               <th scope="col">Market window</th><th scope="col">Side</th><th scope="col">Shares</th>
               <th scope="col">Entry</th><th scope="col">Exit / payout</th><th scope="col">Status</th><th scope="col">P&amp;L</th>
@@ -349,6 +374,7 @@ function TradeActivity({ trades }) {
 export default function Polymarket() {
   const [isDark, setIsDark] = useThemePreference();
   const { snapshot, state } = useFeed();
+  const strategy = useMemo(() => strategyHistory(snapshot), [snapshot]);
   const [now, setNow] = useState(() => Date.now() / 1000);
   useEffect(() => {
     const previous = document.title;
@@ -398,25 +424,25 @@ export default function Polymarket() {
       </div>
 
       <section className="pm-metrics" aria-label="Paper trading metrics">
-        <div className="pm-metric"><span>Realized P&amp;L</span>
-          <strong className={tone(metrics?.realizedPnl)}>{metrics ? signedMoney.format(metrics.realizedPnl) : '—'}</strong>
-          <small>{metrics ? `From ${money.format(metrics.startingCash)} starting cash` : 'Simulated results'}</small></div>
-        <div className="pm-metric"><span>Available cash</span>
-          <strong>{metrics ? money.format(metrics.available) : '—'}</strong>
-          <small>{metrics ? `${money.format(metrics.reserved)} reserved for bids` : 'Paper balance'}</small></div>
+        <div className="pm-metric"><span>30¢ strategy P&amp;L</span>
+          <strong className={tone(strategy.realizedPnl)}>{signedMoney.format(strategy.realizedPnl)}</strong>
+          <small>{metrics ? 'Backtest and recorded results' : 'Pre-reset results · Awaiting feed'}</small></div>
+        <div className="pm-metric"><span>Modeled available cash</span>
+          <strong>{strategy.available === null ? '—' : money.format(strategy.available)}</strong>
+          <small>{metrics ? `Current ledger ${money.format(metrics.available)} available` : 'Awaiting paper ledger'}</small></div>
         <div className="pm-metric"><span>Open positions</span>
           <strong>{metrics?.openPositions ?? '—'}</strong>
           <small>{metrics ? `${metrics.restingBids} resting ${metrics.restingBids === 1 ? 'bid' : 'bids'}` : 'Including unsettled positions'}</small></div>
         <div className="pm-metric"><span>Closed trades</span>
-          <strong>{metrics?.closedTrades ?? '—'}</strong>
-          <small>{metrics?.closedTrades ? `${metrics.winningTrades} profitable · ${Math.round(metrics.winningTrades / metrics.closedTrades * 100)}%` : 'Sold or settled'}</small></div>
+          <strong>{strategy.closedTrades}</strong>
+          <small>{strategy.winningTrades} profitable · {Math.round(strategy.winningTrades / strategy.closedTrades * 100)}%</small></div>
       </section>
 
       <div className="pm-overview">
-        <PnlChart snapshot={snapshot} isDark={isDark} />
+        <PnlChart strategy={strategy} isDark={isDark} />
         <CurrentMarket market={snapshot?.market} now={now} fresh={running} />
       </div>
-      <TradeActivity trades={snapshot?.trades} />
+      <TradeActivity trades={strategy.trades} />
       <p className="pm-footnote">Paper fills require enough displayed size through the order price. Market quotes and settlement payouts come from Polymarket.</p>
     </main>
   );
