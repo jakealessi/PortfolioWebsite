@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useThemePreference } from './theme';
+import archivedActivity from './polymarket-archived-activity.json';
 import './polymarket.css';
 
 const FEED = import.meta.env.VITE_POLYMARKET_FEED_URL
@@ -32,6 +33,8 @@ const clock = (seconds) => {
 const cents = (price) => price == null ? '—' : `${Number((price * 100).toFixed(2))}¢`;
 const dateTime = (seconds) => date.format(new Date(seconds * 1000));
 const tone = (value) => value > 0 ? 'positive' : value < 0 ? 'negative' : '';
+const archivedPnl = archivedActivity.trades.reduce((sum, trade) => sum + trade.pnl, 0);
+const archivedSales = archivedActivity.trades.filter((trade) => trade.state === 'sold').length;
 
 function useFeed() {
   const [feed, setFeed] = useState({ snapshot: null, state: 'loading' });
@@ -256,22 +259,45 @@ function CurrentMarket({ market, now, fresh }) {
 
 function TradeActivity({ trades }) {
   const [filter, setFilter] = useState('all');
-  const visible = (trades ?? []).filter((trade) => filter === 'all'
-    || (filter === 'closed' ? isClosed(trade) : ['bid', 'held', 'ask', 'awaiting'].includes(trade.state)));
+  const [expanded, setExpanded] = useState(false);
+  const activity = [...(trades ?? []), ...archivedActivity.trades];
+  const visible = activity.filter((trade) => {
+    if (filter === 'pre-reset') return Boolean(trade.source);
+    if (filter === 'closed') return isClosed(trade);
+    if (filter === 'open') return ['bid', 'held', 'ask', 'awaiting'].includes(trade.state);
+    return true;
+  });
+  const rows = expanded ? visible : visible.slice(0, 16);
   return (
     <section className="pm-panel pm-activity" aria-labelledby="pm-activity-title">
       <div className="pm-panel-heading">
         <div>
-          <h2 id="pm-activity-title">Recent activity</h2>
-          <p>Paper orders and outcomes</p>
+          <h2 id="pm-activity-title">Trade activity</h2>
+          <p>Current paper orders and pre-reset 30¢ results</p>
         </div>
         <div className="pm-tabs" aria-label="Filter activity">
-          {[['all', 'All'], ['open', 'Open'], ['closed', 'Closed']].map(([value, label]) => (
-            <button key={value} type="button" onClick={() => setFilter(value)}
+          {[['all', 'All'], ['open', 'Open'], ['closed', 'Closed'], ['pre-reset', 'Pre-reset']].map(([value, label]) => (
+            <button key={value} type="button" onClick={() => {
+              setFilter(value);
+              setExpanded(value === 'pre-reset');
+            }}
               aria-pressed={filter === value}>{label}</button>
           ))}
         </div>
       </div>
+      <details className="pm-activity-method">
+        <summary>Pre-reset at 30¢ · {archivedSales} of {archivedActivity.trades.length} sold · {signedMoney.format(archivedPnl)}</summary>
+        <p>
+          The archive covers {archivedActivity.windows} quoted windows, including{' '}
+          {archivedActivity.windows - archivedActivity.trades.length} without a filled entry.
+          The backtest uses recorded entries and counts a 30¢ sale if a buy of at least five
+          shares printed above 30¢ on that side after entry and before close. Public trades cannot confirm a
+          maker fill. The archived 30¢ sale came from the paper ledger.{' '}
+          <a href="https://docs.polymarket.com/api-reference/feeds/list-trades" target="_blank" rel="noreferrer">
+            Polymarket trade feed ↗
+          </a>
+        </p>
+      </details>
       {visible.length ? (
         <div className="pm-table-scroll">
           <table aria-label="Recent paper trading activity">
@@ -279,8 +305,8 @@ function TradeActivity({ trades }) {
               <th scope="col">Market window</th><th scope="col">Side</th><th scope="col">Shares</th>
               <th scope="col">Entry</th><th scope="col">Exit / payout</th><th scope="col">Status</th><th scope="col">P&amp;L</th>
             </tr></thead>
-            <tbody>{visible.map((trade) => (
-              <tr key={`${trade.slug}-${trade.side}`}>
+            <tbody>{rows.map((trade) => (
+              <tr key={`${trade.source ?? 'current'}-${trade.slug}-${trade.side}`}>
                 <td><a href={`https://polymarket.com/event/${encodeURIComponent(trade.slug)}`}
                   target="_blank" rel="noreferrer">{dateTime(trade.start)} <span aria-hidden="true">↗</span></a></td>
                 <td className={trade.side === 'Up' ? 'positive' : 'negative'}>{trade.side}</td>
@@ -291,8 +317,15 @@ function TradeActivity({ trades }) {
                       : trade.state === 'ask' ? <>{cents(trade.exit)} <small>ask</small></> : '—'}
                 </td>
                 <td>
-                  <span className="pm-trade-state">{tradeLabels[trade.state]}</span>
-                  {trade.state === 'settled' && trade.exit != null && (
+                  <span className="pm-trade-state">
+                    {trade.source === 'backtest'
+                      ? (trade.state === 'sold' ? 'Estimated sale' : 'Held to settlement')
+                      : tradeLabels[trade.state]}
+                  </span>
+                  {trade.source && <small className="pm-unfilled">
+                    {trade.source === 'backtest' ? 'Backtest' : 'Pre-reset paper run'}
+                  </small>}
+                  {trade.state === 'settled' && trade.exit != null && trade.source !== 'backtest' && (
                     <small className="pm-unfilled">{cents(trade.exit)} sell unfilled</small>
                   )}
                 </td>
@@ -302,7 +335,12 @@ function TradeActivity({ trades }) {
           </table>
         </div>
       ) : (
-        <div className="pm-activity-empty">{trades?.length ? 'No orders match this filter.' : 'No paper orders recorded yet.'}</div>
+        <div className="pm-activity-empty">No orders match this filter.</div>
+      )}
+      {visible.length > 16 && (
+        <button className="pm-theme pm-activity-more" type="button" onClick={() => setExpanded(!expanded)}>
+          {expanded ? 'Show fewer rows' : `Show all ${visible.length} rows`}
+        </button>
       )}
     </section>
   );

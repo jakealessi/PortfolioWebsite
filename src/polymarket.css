@@ -194,7 +194,12 @@
 .pm-quote strong span, .pm-quote small { color: var(--text-secondary); }
 .pm-quote small { display: block; font-size: 0.65rem; }
 
-.pm-activity .pm-panel-heading { margin-bottom: 10px; }
+.pm-activity .pm-panel-heading { margin-bottom: 10px; flex-wrap: wrap; }
+.pm-activity-method { margin: 0 0 8px; color: var(--text-secondary); font-size: 0.74rem; }
+.pm-activity-method summary { cursor: pointer; width: fit-content; }
+.pm-activity-method p { margin-top: 6px; max-width: 80ch; }
+.pm-activity-method a { text-decoration: underline; }
+.pm-page .pm-activity-more { margin-top: 10px; font-size: 0.74rem; }
 .pm-table-scroll { overflow-x: auto; }
 .pm-activity table { width: 100%; border-collapse: collapse; font-size: 0.77rem; text-align: left; }
 .pm-activity th, .pm-activity td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--border); white-space: nowrap; }
