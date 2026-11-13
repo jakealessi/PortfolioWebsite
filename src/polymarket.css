@@ -98,6 +98,8 @@
   border-bottom: 1px solid var(--border);
 }
 .pm-rule-strip strong { margin-left: 4px; color: var(--text); }
+.pm-history-selector { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 12px; margin-top: 13px; }
+.pm-history-selector p { color: var(--text-secondary); font-size: 0.72rem; }
 
 .pm-metrics {
   display: grid;
@@ -209,6 +211,7 @@
 .pm-exit-method a { text-decoration: underline; }
 
 .pm-activity .pm-panel-heading { margin-bottom: 10px; }
+.pm-page .pm-more-trades { margin-top: 12px; font-size: 0.74rem; }
 .pm-table-scroll { overflow-x: auto; }
 .pm-activity table { width: 100%; border-collapse: collapse; font-size: 0.77rem; text-align: left; }
 .pm-activity th, .pm-activity td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--border); white-space: nowrap; }
