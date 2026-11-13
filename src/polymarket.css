@@ -194,6 +194,20 @@
 .pm-quote strong span, .pm-quote small { color: var(--text-secondary); }
 .pm-quote small { display: block; font-size: 0.65rem; }
 
+.pm-exit-comparison { margin-bottom: 14px; }
+.pm-exit-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+.pm-exit-results > div { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; }
+.pm-exit-results dt, .pm-exit-results small, .pm-exit-method { color: var(--text-secondary); font-size: 0.74rem; }
+.pm-exit-results strong { display: block; font-size: 1.3rem; font-weight: 650; }
+.pm-exit-method summary { cursor: pointer; width: fit-content; }
+.pm-exit-method p { margin-top: 6px; max-width: 80ch; }
+.pm-exit-method a { text-decoration: underline; }
+
 .pm-activity .pm-panel-heading { margin-bottom: 10px; }
 .pm-table-scroll { overflow-x: auto; }
 .pm-activity table { width: 100%; border-collapse: collapse; font-size: 0.77rem; text-align: left; }
@@ -220,4 +234,5 @@
   .pm-panel, .pm-metric { padding: 13px; }
   .pm-rule-strip { column-gap: 14px; }
   .pm-chart { height: 180px; }
+  .pm-exit-results { grid-template-columns: 1fr; gap: 6px; }
 }

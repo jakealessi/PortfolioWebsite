@@ -308,6 +308,56 @@ function TradeActivity({ trades }) {
   );
 }
 
+const backtest = {
+  windows: 67,
+  entries: 21,
+  observed: { sold: 5, pnl: -8.25 },
+  replay: { sold: 12, pnl: -3.00 },
+  savedQuotesPnl: -10.50,
+};
+
+function ExitComparison({ current }) {
+  return (
+    <section className="pm-panel pm-exit-comparison" aria-labelledby="pm-exit-title">
+      <div className="pm-panel-heading">
+        <div>
+          <h2 id="pm-exit-title">30¢ exit comparison</h2>
+          <p>Nov 12–13 · Same {backtest.entries} entries across {backtest.windows} quoted windows</p>
+        </div>
+      </div>
+      <dl className="pm-exit-results">
+        <div>
+          <dt>51¢ observed</dt>
+          <dd><strong className={tone(backtest.observed.pnl)}>{signedMoney.format(backtest.observed.pnl)}</strong>
+            <small>{backtest.observed.sold} sold before close</small></dd>
+        </div>
+        <div>
+          <dt>30¢ historical estimate</dt>
+          <dd><strong className={tone(backtest.replay.pnl)}>{signedMoney.format(backtest.replay.pnl)}</strong>
+            <small>{backtest.replay.sold} modeled sales before close</small></dd>
+        </div>
+        <div>
+          <dt>30¢ paper run</dt>
+          <dd><strong className={tone(current?.realizedPnl)}>{current ? signedMoney.format(current.realizedPnl) : '—'}</strong>
+            <small>{current ? `${current.closed} closed · ${current.sold} sold` : 'Waiting for bot data'}</small></dd>
+        </div>
+      </dl>
+      <details className="pm-exit-method">
+        <summary>How the replay estimates fills</summary>
+        <p>
+          The replay counted a sale when Polymarket recorded a buy of at least five shares above
+          30¢ after entry and before market close. The exchange records do not show our queue
+          position. Using the bot’s saved quotes and recorded sales produced an estimate of{' '}
+          {signedMoney.format(backtest.savedQuotesPnl)}.{' '}
+          <a href="https://docs.polymarket.com/api-reference/feeds/list-trades" target="_blank" rel="noreferrer">
+            Polymarket trade feed ↗
+          </a>
+        </p>
+      </details>
+    </section>
+  );
+}
+
 export default function Polymarket() {
   const [isDark, setIsDark] = useThemePreference();
   const { snapshot, state } = useFeed();
@@ -362,7 +412,7 @@ export default function Polymarket() {
       <section className="pm-metrics" aria-label="Paper trading metrics">
         <div className="pm-metric"><span>Realized P&amp;L</span>
           <strong className={tone(metrics?.realizedPnl)}>{metrics ? signedMoney.format(metrics.realizedPnl) : '—'}</strong>
-          <small>{metrics ? `From ${money.format(metrics.startingCash)} starting cash` : 'Simulated results'}</small></div>
+          <small>{metrics ? `All paper trades · ${money.format(metrics.startingCash)} start` : 'Simulated results'}</small></div>
         <div className="pm-metric"><span>Available cash</span>
           <strong>{metrics ? money.format(metrics.available) : '—'}</strong>
           <small>{metrics ? `${money.format(metrics.reserved)} reserved for bids` : 'Paper balance'}</small></div>
@@ -378,6 +428,7 @@ export default function Polymarket() {
         <PnlChart snapshot={snapshot} isDark={isDark} />
         <CurrentMarket market={snapshot?.market} now={now} fresh={running} />
       </div>
+      <ExitComparison current={snapshot?.exit30} />
       <TradeActivity trades={snapshot?.trades} />
       <p className="pm-footnote">Paper fills require enough displayed size through the order price. Market quotes and settlement payouts come from Polymarket.</p>
     </main>
