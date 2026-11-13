@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useThemePreference } from './theme';
-import replay from './polymarket-replay.json';
 import './polymarket.css';
 
 const FEED = import.meta.env.VITE_POLYMARKET_FEED_URL
@@ -33,40 +32,6 @@ const clock = (seconds) => {
 const cents = (price) => price == null ? '—' : `${Number((price * 100).toFixed(2))}¢`;
 const dateTime = (seconds) => date.format(new Date(seconds * 1000));
 const tone = (value) => value > 0 ? 'positive' : value < 0 ? 'negative' : '';
-const replayPnl = replay.trades.reduce((sum, trade) => sum + trade.pnl, 0);
-const replaySold = replay.trades.filter((trade) => trade.state === 'sold').length;
-const replayWins = replay.trades.filter((trade) => trade.pnl > 0).length;
-
-function replayHistory(snapshot) {
-  const replayedTrades = replay.trades.map((trade) => ({ ...trade, estimated: true }));
-  const recordedTrades = (snapshot?.trades ?? []).filter(
-    (trade) => (trade.quotedAt ?? trade.start) >= replay.cutover,
-  );
-  let pnl = 0;
-  const history = [{ time: replayedTrades[0].start, pnl }];
-  for (const trade of [...replayedTrades].sort((a, b) => a.closedAt - b.closedAt)) {
-    pnl += trade.pnl;
-    history.push({ time: trade.closedAt, pnl });
-  }
-  history.push({ time: replay.cutover, pnl });
-
-  const current = snapshot?.exit30;
-  for (const point of current?.history ?? []) {
-    if (point.time > replay.cutover) {
-      history.push({ time: point.time, pnl: pnl + point.pnl });
-    }
-  }
-  return {
-    history,
-    trades: [...replayedTrades, ...recordedTrades].sort((a, b) => b.start - a.start),
-    publishedAt: snapshot?.publishedAt ?? replay.cutover,
-    metrics: {
-      closedTrades: replayedTrades.length + (current?.closed ?? 0),
-      winningTrades: replayWins + (current?.winning ?? 0),
-      realizedPnl: replayPnl + (current?.realizedPnl ?? 0),
-    },
-  };
-}
 
 function useFeed() {
   const [feed, setFeed] = useState({ snapshot: null, state: 'loading' });
@@ -119,7 +84,7 @@ function pnlPoints(history, range, publishedAt) {
   return points;
 }
 
-function PnlChart({ snapshot, isDark, estimated }) {
+function PnlChart({ snapshot, isDark }) {
   const [range, setRange] = useState('all');
   const canvas = useRef(null);
   const points = useMemo(
@@ -225,8 +190,8 @@ function PnlChart({ snapshot, isDark, estimated }) {
     <section className="pm-panel pm-performance" aria-labelledby="pm-performance-title">
       <div className="pm-panel-heading">
         <div>
-          <h2 id="pm-performance-title">{estimated ? '30¢ P&L history' : 'Recorded P&L'}</h2>
-          <p>{estimated ? 'Estimated before the switch · Recorded since' : 'Cumulative paper results'}</p>
+          <h2 id="pm-performance-title">Realized P&amp;L</h2>
+          <p>Cumulative paper results</p>
         </div>
         <div className="pm-tabs" aria-label="Chart period">
           {[['24h', '24H'], ['all', 'All']].map(([value, label]) => (
@@ -237,7 +202,7 @@ function PnlChart({ snapshot, isDark, estimated }) {
       </div>
       {meaningful ? (
         <canvas ref={canvas} className="pm-chart" role="img"
-          aria-label={`${estimated ? '30¢ replay' : 'Recorded'} profit and loss for ${range === '24h' ? 'the last 24 hours' : 'all time'} ends at ${signedMoney.format(points.at(-1).pnl)}.`} />
+          aria-label={`Realized profit and loss for ${range === '24h' ? 'the last 24 hours' : 'all time'} ends at ${signedMoney.format(points.at(-1).pnl)}.`} />
       ) : (
         <div className="pm-chart pm-chart-empty">
           <p>{snapshot ? 'P&L appears after the first closed trade.' : 'Waiting for the first bot update.'}</p>
@@ -289,18 +254,16 @@ function CurrentMarket({ market, now, fresh }) {
   );
 }
 
-function TradeActivity({ trades, estimated }) {
+function TradeActivity({ trades }) {
   const [filter, setFilter] = useState('all');
-  const [showAll, setShowAll] = useState(false);
   const visible = (trades ?? []).filter((trade) => filter === 'all'
     || (filter === 'closed' ? isClosed(trade) : ['bid', 'held', 'ask', 'awaiting'].includes(trade.state)));
-  const displayed = showAll ? visible : visible.slice(0, 16);
   return (
     <section className="pm-panel pm-activity" aria-labelledby="pm-activity-title">
       <div className="pm-panel-heading">
         <div>
-          <h2 id="pm-activity-title">{estimated ? '30¢ trade history' : 'Recent activity'}</h2>
-          <p>{estimated ? 'Replayed exits and recorded paper orders' : 'Recorded paper orders and outcomes'}</p>
+          <h2 id="pm-activity-title">Recent activity</h2>
+          <p>Paper orders and outcomes</p>
         </div>
         <div className="pm-tabs" aria-label="Filter activity">
           {[['all', 'All'], ['open', 'Open'], ['closed', 'Closed']].map(([value, label]) => (
@@ -316,7 +279,7 @@ function TradeActivity({ trades, estimated }) {
               <th scope="col">Market window</th><th scope="col">Side</th><th scope="col">Shares</th>
               <th scope="col">Entry</th><th scope="col">Exit / payout</th><th scope="col">Status</th><th scope="col">P&amp;L</th>
             </tr></thead>
-            <tbody>{displayed.map((trade) => (
+            <tbody>{visible.map((trade) => (
               <tr key={`${trade.slug}-${trade.side}`}>
                 <td><a href={`https://polymarket.com/event/${encodeURIComponent(trade.slug)}`}
                   target="_blank" rel="noreferrer">{dateTime(trade.start)} <span aria-hidden="true">↗</span></a></td>
@@ -329,7 +292,6 @@ function TradeActivity({ trades, estimated }) {
                 </td>
                 <td>
                   <span className="pm-trade-state">{tradeLabels[trade.state]}</span>
-                  {trade.estimated && <small className="pm-unfilled">Backtest</small>}
                   {trade.state === 'settled' && trade.exit != null && (
                     <small className="pm-unfilled">{cents(trade.exit)} sell unfilled</small>
                   )}
@@ -342,61 +304,6 @@ function TradeActivity({ trades, estimated }) {
       ) : (
         <div className="pm-activity-empty">{trades?.length ? 'No orders match this filter.' : 'No paper orders recorded yet.'}</div>
       )}
-      {visible.length > 16 && (
-        <button type="button" className="pm-theme pm-more-trades" onClick={() => setShowAll(!showAll)}>
-          {showAll ? 'Show fewer rows' : `Show all ${visible.length} rows`}
-        </button>
-      )}
-    </section>
-  );
-}
-
-const backtest = {
-  windows: 67,
-  entries: replay.trades.length,
-  observed: { sold: 5, pnl: -8.25 },
-  replay: { sold: replaySold, pnl: replayPnl },
-  savedQuotesPnl: -10.50,
-};
-
-function ExitComparison({ current }) {
-  return (
-    <section className="pm-panel pm-exit-comparison" aria-labelledby="pm-exit-title">
-      <div className="pm-panel-heading">
-        <div>
-          <h2 id="pm-exit-title">30¢ exit comparison</h2>
-          <p>Nov 12–13 · Same {backtest.entries} entries across {backtest.windows} quoted windows</p>
-        </div>
-      </div>
-      <dl className="pm-exit-results">
-        <div>
-          <dt>51¢ observed</dt>
-          <dd><strong className={tone(backtest.observed.pnl)}>{signedMoney.format(backtest.observed.pnl)}</strong>
-            <small>{backtest.observed.sold} sold before close</small></dd>
-        </div>
-        <div>
-          <dt>30¢ historical estimate</dt>
-          <dd><strong className={tone(backtest.replay.pnl)}>{signedMoney.format(backtest.replay.pnl)}</strong>
-            <small>{backtest.replay.sold} modeled sales before close</small></dd>
-        </div>
-        <div>
-          <dt>30¢ paper run</dt>
-          <dd><strong className={tone(current?.realizedPnl)}>{current ? signedMoney.format(current.realizedPnl) : '—'}</strong>
-            <small>{current ? `${current.closed} closed · ${current.sold} sold` : 'Waiting for bot data'}</small></dd>
-        </div>
-      </dl>
-      <details className="pm-exit-method">
-        <summary>How the replay estimates fills</summary>
-        <p>
-          The replay counted a sale when Polymarket recorded a buy of at least five shares above
-          30¢ after entry and before market close. The exchange records do not show our queue
-          position. Using the bot’s saved quotes and recorded sales produced an estimate of{' '}
-          {signedMoney.format(backtest.savedQuotesPnl)}.{' '}
-          <a href="https://docs.polymarket.com/api-reference/feeds/list-trades" target="_blank" rel="noreferrer">
-            Polymarket trade feed ↗
-          </a>
-        </p>
-      </details>
     </section>
   );
 }
@@ -405,9 +312,6 @@ export default function Polymarket() {
   const [isDark, setIsDark] = useThemePreference();
   const { snapshot, state } = useFeed();
   const [now, setNow] = useState(() => Date.now() / 1000);
-  const [view, setView] = useState('replay');
-  const replayView = view === 'replay';
-  const shownHistory = useMemo(() => replayView ? replayHistory(snapshot) : snapshot, [replayView, snapshot]);
   useEffect(() => {
     const previous = document.title;
     document.title = 'Polymarket Paper Trader · Jake Alessi';
@@ -426,7 +330,6 @@ export default function Polymarket() {
     : snapshot.status === 'stopped' ? 'Bot stopped' : !fresh ? 'Feed stale' : statuses[snapshot.status];
   const running = fresh && snapshot.status === 'running';
   const metrics = snapshot?.metrics;
-  const historyMetrics = shownHistory?.metrics;
 
   return (
     <main className="pm-page">
@@ -456,34 +359,26 @@ export default function Polymarket() {
         <span>Maker exit <strong>30¢</strong></span>
       </div>
 
-      <div className="pm-history-selector">
-        <div className="pm-tabs" aria-label="History view">
-          <button type="button" onClick={() => setView('replay')} aria-pressed={replayView}>30¢ history</button>
-          <button type="button" onClick={() => setView('recorded')} aria-pressed={!replayView}>Recorded history</button>
-        </div>
-        {replayView && <p>Estimated 30¢ exits through Nov 13, 11:22 a.m. ET, then recorded trades.</p>}
-      </div>
       <section className="pm-metrics" aria-label="Paper trading metrics">
-        <div className="pm-metric"><span>{replayView ? '30¢ history P&L' : 'Recorded P&L'}</span>
-          <strong className={tone(historyMetrics?.realizedPnl)}>{historyMetrics ? signedMoney.format(historyMetrics.realizedPnl) : '—'}</strong>
-          <small>{replayView ? 'Historical estimate + current paper results' : 'All recorded paper trades'}</small></div>
-        <div className="pm-metric"><span>Available ledger cash</span>
+        <div className="pm-metric"><span>Realized P&amp;L</span>
+          <strong className={tone(metrics?.realizedPnl)}>{metrics ? signedMoney.format(metrics.realizedPnl) : '—'}</strong>
+          <small>{metrics ? `From ${money.format(metrics.startingCash)} starting cash` : 'Simulated results'}</small></div>
+        <div className="pm-metric"><span>Available cash</span>
           <strong>{metrics ? money.format(metrics.available) : '—'}</strong>
           <small>{metrics ? `${money.format(metrics.reserved)} reserved for bids` : 'Paper balance'}</small></div>
         <div className="pm-metric"><span>Open positions</span>
           <strong>{metrics?.openPositions ?? '—'}</strong>
           <small>{metrics ? `${metrics.restingBids} resting ${metrics.restingBids === 1 ? 'bid' : 'bids'}` : 'Including unsettled positions'}</small></div>
         <div className="pm-metric"><span>Closed trades</span>
-          <strong>{historyMetrics?.closedTrades ?? '—'}</strong>
-          <small>{historyMetrics?.closedTrades ? `${historyMetrics.winningTrades} profitable · ${Math.round(historyMetrics.winningTrades / historyMetrics.closedTrades * 100)}%` : 'Sold or settled'}</small></div>
+          <strong>{metrics?.closedTrades ?? '—'}</strong>
+          <small>{metrics?.closedTrades ? `${metrics.winningTrades} profitable · ${Math.round(metrics.winningTrades / metrics.closedTrades * 100)}%` : 'Sold or settled'}</small></div>
       </section>
 
       <div className="pm-overview">
-        <PnlChart snapshot={shownHistory} isDark={isDark} estimated={replayView} />
+        <PnlChart snapshot={snapshot} isDark={isDark} />
         <CurrentMarket market={snapshot?.market} now={now} fresh={running} />
       </div>
-      <ExitComparison current={snapshot?.exit30} />
-      <TradeActivity trades={shownHistory?.trades} estimated={replayView} />
+      <TradeActivity trades={snapshot?.trades} />
       <p className="pm-footnote">Paper fills require enough displayed size through the order price. Market quotes and settlement payouts come from Polymarket.</p>
     </main>
   );
