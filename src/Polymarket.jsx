@@ -22,6 +22,7 @@ const updateTime = new Intl.DateTimeFormat('en-US', {
 const tradeLabels = {
   bid: 'Bid resting', held: 'Held', ask: 'Sell resting',
   awaiting: 'Awaiting settlement', sold: 'Sold', settled: 'Settled', expired: 'Bid expired',
+  canceled: 'Other side filled',
 };
 const isClosed = (trade) => ['sold', 'settled'].includes(trade.state);
 const clock = (seconds) => {
@@ -256,7 +257,7 @@ function CurrentMarket({ market, now, fresh }) {
 function TradeActivity({ trades }) {
   const [filter, setFilter] = useState('all');
   const visible = (trades ?? []).filter((trade) => filter === 'all'
-    || (filter === 'closed' ? isClosed(trade) : !isClosed(trade) && trade.state !== 'expired'));
+    || (filter === 'closed' ? isClosed(trade) : ['bid', 'held', 'ask', 'awaiting'].includes(trade.state)));
   return (
     <section className="pm-panel pm-activity" aria-labelledby="pm-activity-title">
       <div className="pm-panel-heading">
@@ -279,7 +280,7 @@ function TradeActivity({ trades }) {
               <th scope="col">Entry</th><th scope="col">Exit / payout</th><th scope="col">Status</th><th scope="col">P&amp;L</th>
             </tr></thead>
             <tbody>{visible.map((trade) => (
-              <tr key={trade.slug}>
+              <tr key={`${trade.slug}-${trade.side}`}>
                 <td><a href={`https://polymarket.com/event/${encodeURIComponent(trade.slug)}`}
                   target="_blank" rel="noreferrer">{dateTime(trade.start)} <span aria-hidden="true">↗</span></a></td>
                 <td className={trade.side === 'Up' ? 'positive' : 'negative'}>{trade.side}</td>
@@ -353,7 +354,7 @@ export default function Polymarket() {
       </header>
 
       <div className="pm-rule-strip" aria-label="Strategy">
-        <span>Maker entry <strong>20¢</strong></span>
+        <span>Opening bids <strong>20¢ Up / Down</strong></span>
         <span>Entry cutoff <strong>3:45 left</strong></span>
         <span>Maker exit <strong>51¢</strong></span>
       </div>
