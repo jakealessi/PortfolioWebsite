@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 const outputDirectory = 'dist';
 const appShell = join(outputDirectory, 'index.html');
-const staticRoutes = ['privacy-policy', 'support', 'polymarket'];
+const staticRoutes = ['privacy-policy', 'support'];
 
 await copyFile(appShell, join(outputDirectory, '404.html'));
 

@@ -1,7 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Freebies from './Freebies';
-import Polymarket from './Polymarket';
 import PrivacyPolicy from './PrivacyPolicy';
 import Support from './Support';
 import { FadeIn, LightbulbToggle } from './components';
@@ -819,7 +818,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Portfolio />} />
-      <Route path="/polymarket" element={<Polymarket />} />
       <Route path="/freebies" element={<Freebies />} />
       <Route path="/support" element={<Support />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
